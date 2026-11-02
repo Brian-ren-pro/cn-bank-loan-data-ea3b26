@@ -113,6 +113,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .chart img{display:block;width:100%;border-radius:2px}
 .facts{margin-top:18px;border:1px solid var(--line);border-radius:3px;background:rgba(255,255,255,.03);padding:16px 18px}
 .facts h6{font-size:11.5px;color:var(--gold);letter-spacing:.14em;margin-bottom:10px;font-weight:700}
+.facts .scrollx+h6{margin-top:20px}
 .facts table{width:100%;border-collapse:collapse;font-size:12px}
 .facts th{text-align:left;color:var(--dim);font-size:10.5px;letter-spacing:.1em;padding:6px 8px;border-bottom:1px solid var(--line)}
 .facts td{padding:6px 8px;border-bottom:1px solid var(--line2);color:#c8d5e3;line-height:1.6}
@@ -441,10 +442,11 @@ ours_bank:['法人银行','银行类型','接入日期']
 
 /* ============ 六个板块 ============ */
 const S={
-'a-annual':{no:'01',crumb:'A 股上市公司 / 定期报告',title:'A 股 · 年报与半年报附注',
+'a-annual':{no:'01',crumb:'A 股上市公司 / 定期报告',title:'A 股 · 年报与半年报',
  lead:'年报附注把短期借款、长期借款按信用、保证、抵押、质押分类列示，部分公司还列出单笔合约。CSMAR 把分类汇总数做成了半年度表；单笔合约没有数据库，只能手工整理。',
  media1:{imgs:[{img:'assets/a-annual.png',full:'assets/a-annual-full.png'},{img:'assets/a-000027.png',full:'assets/a-000027-full.png'}],cap:'① 三一重工 2023 年报第 161 页：受限资产与短期借款分类；② 深圳能源 2023 年报第 254 页：短期借款 34.1 亿元，与下面 CSMAR 半年表逐项一致。'},
  card1:{rows:[['找','短期借款、一年内到期的非流动负债、长期借款的附注；受限资产；对外担保；关联方担保'],['得','分类汇总：信用、保证、抵押、质押余额；单笔合约（部分公司）：银行、金额、期限、利率、担保方式'],['库','CSMAR 借款统计表（半年度）：只有分类汇总数；单笔合约没有数据库']],chips:['短期借款','长期借款','受限资产','信用／保证／抵押／质押']},
+ facts:`<h6>正文里能取到的</h6><div class="scrollx" style="border:none;background:none"><table style="min-width:640px"><thead><tr><th>正文章节</th><th>能取到什么</th></tr></thead><tbody><tr><td>管理层讨论与分析：资产及负债状况</td><td>短期借款、长期借款的变动和原因；资产权利受限情况（受限资产及原因，常写明用于抵押借款）</td></tr><tr><td>重要事项：重大合同及其履行情况—担保情况</td><td><b>逐笔担保表</b>：对外担保与对子公司担保的担保对象、额度、实际担保金额、起止日、担保类型、是否为关联方担保；以及担保总额汇总</td></tr><tr><td>重要事项：重大关联交易</td><td>关联债权债务往来、关联方为公司借款提供的担保</td></tr><tr><td>债券相关情况（发行债券的公司）</td><td>存续的公司债、中期票据，以及授信与银行贷款的总体情况（不是逐笔银行借款）</td></tr></tbody></table></div><h6>附注里能取到的</h6><div class="scrollx" style="border:none;background:none"><table style="min-width:640px"><thead><tr><th>附注科目</th><th>能取到什么</th></tr></thead><tbody><tr><td>短期借款、长期借款、一年内到期的非流动负债</td><td><b>担保方式分类汇总</b>（CSMAR 半年表就是整理这一层）；部分公司列出金额较大的逐笔合约（李广子 2020、2025 的数据来源）</td></tr><tr><td>关联方交易：关联担保</td><td>逐笔关联担保：担保方、金额、起止日、是否履行完毕</td></tr><tr><td>所有权或使用权受限资产、或有事项、承诺事项</td><td>抵押质押物，与借款相关的担保和承诺</td></tr><tr><td>财务费用</td><td>利息支出</td></tr></tbody></table></div><p>章节名按年报格式准则的结构列出；A 股这一页没有逐页核对具体公司的年报。与新三板相同：担保分类汇总只在附注，逐笔担保和受限资产在正文和附注都可能出现。</p>`,
  tables:[{id:'half',tab:'CSMAR 借款统计表（半年度）',name:'上市公司向金融机构借款统计表（半年度）',d:'csmar_half',
    meta:[['原始文件','DEBT_LOANSTATIS.xlsx'],['一行是','一家公司的一个报告期'],['口径','期末余额（存量）'],['覆盖','A 股 2000—2025']],
    shots:[{img:'figs/sheet-csmar-half-a.png'},{img:'figs/sheet-csmar-half-b.png'}],shotcap:'原始文件前 30 行，上为前 13 个字段、下为后 12 个字段。',
@@ -490,11 +492,11 @@ const S={
 <li><b>样本：</b>38,178 个企业年，Gloan 均值 0.91——反推有绿贷的企业年约 8%—9%，12 年累计约 3,000 多个，平均每年约 300 个。难点在第 1 步：CSMAR 的资金投向 57.6% 只写“业务经营”，直接按关键词匹配会把经营范围里的环保字样误判为绿色贷款。</li></ol>`,
  papers:['zhang2025','wang2026','lin2025','yu2025','pan2026','li2022','zhong2025','zhangjj2025','liugc2025','lu2025','peng2026','gui2025','liml2025','song2026','pengyi2025']},
 
-'n-annual':{no:'03',crumb:'新三板挂牌公司 / 定期报告',title:'新三板 · 年报与半年报附注',
+'n-annual':{no:'03',crumb:'新三板挂牌公司 / 定期报告',title:'新三板 · 年报与半年报',
  lead:'科目和 A 股一样，但没有任何数据库整理。我们从 24,039 份年报中做了三套数据：企业—年担保分类汇总、逐笔贷款、企业×银行关系。',
  media1:{imgs:[{img:'assets/n-2022.png',full:'assets/n-2022-full.png'},{img:'assets/n-2023.png',full:'assets/n-2023-full.png'},{img:'assets/n-2023-restricted.png',full:'assets/n-2023-restricted-full.png'}],cap:'维泰股份（831099），三张图：① 2022 年报第八节专章，逐笔列示贷款方式、提供方、规模、起止日与利率；② 2023 年报附注「19、短期借款」，只剩保证与信用两类汇总；③ 同一份 2023 年报的受限资产说明，仍能读到单笔贷款——国家开发银行新疆分行 3 亿元，2018-12-14 至 2031-12-14，余额 2.7 亿元，抵押 5 栋养老住宅与 2 栋商业用房。'},
  card1:{rows:[['找','短期借款分类、长期借款分类、受限资产、对外担保、关联方担保、或有事项'],['得','分类汇总：信用、保证、抵押、质押余额；逐笔（部分企业）：银行、金额、期限、利率、担保方式'],['库','没有。CSMAR 新三板库只有三大报表、基本信息、行业分类，没有借款表']],chips:['短期借款分类','受限资产','对外担保','关联方担保']},
- facts:`<h6>2022 与 2023 的披露规则变了</h6><p>2022 年报有强制专章，逐笔列示贷款方式、提供方、规模、存续期间与利率。2023 年起该章取消，贷款信息转入附注“短期借款”，只按担保方式列汇总数。<b>逐笔披露从强制变成自愿</b>：数据没有消失，而是散在借款附注、担保章节、关联担保、或有事项、受限资产五处，需要逐段找。</p>`,
+ facts:`<h6>正文里能取到的</h6><div class="scrollx" style="border:none;background:none"><table style="min-width:640px"><thead><tr><th>正文章节</th><th>能取到什么</th><th>维泰股份（831099）的例子</th></tr></thead><tbody><tr><td>管理层讨论与分析：资产负债、现金流分析</td><td>短期借款、筹资现金流的变动和原因，一两句话</td><td>2023 年筹资活动现金流净额 −10.28 亿元，并说明原因</td></tr><tr><td>重大事件：提供担保事项</td><td><b>逐笔担保表</b>（被担保人、担保金额、担保余额、起止日、责任类型、是否为关联方），加一张分类汇总表</td><td>2023 年提供担保 9.60 亿元，余额 7.10 亿元；被担保人多为子公司，背后多是子公司的银行借款</td></tr><tr><td>重大事件：关联交易</td><td>关联方为公司借款提供的担保，给预计金额和实际发生额</td><td>控股股东为公司担保，2023 年预计 36.06 亿元、实际发生 18.49 亿元</td></tr><tr><td>重大事件：资产被查封、扣押、冻结或抵押、质押</td><td>受限资产表加一段说明，常写出抵押贷款的银行、合同金额、起止日、余额</td><td>国开行新疆分行 3 亿元贷款在正文第 23 页（上面第 ③ 张图）</td></tr><tr><td>行业信息：融资情况（部分行业才有）</td><td>一句话说明融资来源</td><td>“融资主要来源于流动资金贷款”</td></tr><tr><td><b>2022 年及以前</b>：第八节“银行及非银行金融机构间接融资发生情况”</td><td><b>逐笔贷款专章</b>：贷款方式、贷款方、规模、起止日、利率</td><td>上面第 ① 张图；2023 年起取消</td></tr><tr><td>股份变动与融资</td><td>股票发行、存续的债券（不是银行借款）</td><td>存续的公司债、中期票据</td></tr></tbody></table></div><h6>附注里能取到的</h6><div class="scrollx" style="border:none;background:none"><table style="min-width:640px"><thead><tr><th>附注科目</th><th>能取到什么</th></tr></thead><tbody><tr><td>短期借款、长期借款、一年内到期的非流动负债</td><td><b>担保方式分类汇总</b>，覆盖全部借款，是最可靠的一层；部分企业还自愿列出逐笔明细</td></tr><tr><td>关联方交易：关联担保</td><td>逐笔关联担保：担保方、金额、起止日、是否履行完毕</td></tr><tr><td>所有权受到限制的资产、或有事项、承诺事项</td><td>抵押质押物，与借款相关的担保和承诺</td></tr><tr><td>财务费用</td><td>利息支出，是 COD 的分子</td></tr></tbody></table></div><p><b>和我们的数据的关系：</b>担保分类汇总（CreditShare 等）只来自附注，正文里没有这一层。逐笔数据正文和附注都用了：33,180 笔中借款附注 57%；担保情况 22%、关联担保 9%、受限资产 1.5%，这三类在正文和附注里都有对应章节，出处统计没有区分正文还是附注。2022 年的逐笔信息主要在正文专章，2023 年起分散到附注和正文的重大事件里。核对样本：维泰股份 2023 年报（229 页，财务报表从第 48 页起）与 2025 年半年报，半年报的章节相同。</p></div><div class="facts"><h6>2022 与 2023 的披露规则变了</h6><p>2022 年报有强制专章，逐笔列示贷款方式、提供方、规模、存续期间与利率。2023 年起该章取消，贷款信息转入附注“短期借款”，只按担保方式列汇总数。<b>逐笔披露从强制变成自愿</b>：数据没有消失，而是散在借款附注、担保章节、关联担保、或有事项、受限资产五处，需要逐段找。</p>`,
  tables:[
   {id:'panel',tab:'① 企业—年 分类汇总',name:'企业年度借款与担保分类（附注汇总口径）',d:'ours_panel',
    meta:[['原始文件','企业年度面板.csv（提取层）／变量面板.csv（变量层）'],['一行是','一家企业一个年度'],['口径','期末余额（存量），覆盖全部借款'],['覆盖','2022—2025 年报 24,039 份、7,377 家']],
@@ -824,8 +826,8 @@ function renderHome(){setNav('home');
   app.innerHTML=`<section class="view"><div class="hero"><div class="kicker">DATA SOURCES · 2026</div><h2>中国银行贷款数据</h2><p>按信息从哪里来分三类：A 股公司、新三板公司、银行；每类再分定期报告与公告（银行为内部数据）。<br>点进每个板块可以看到原文截图、全部字段、处理步骤和相关顶刊文献。</p></div>
   <div class="rootnode">贷 款 数 据 从 哪 来</div><div class="fork"><i class="stem"></i><i class="bar"></i><i class="d1"></i><i class="d2"></i><i class="d3"></i></div>
   <div class="cols">
-   <div class="col"><div class="cat">A 股上市公司<span>LISTED · MAIN BOARD</span></div>${node('a-annual','定期报告','年报 · 半年报附注','短期借款、长期借款按担保方式分类；部分公司列出单笔合约','CSMAR 借款统计表（半年度）：只有分类汇总数',false)}${node('a-ann','公告','临时公告','借款／授信公告、担保公告、委托贷款公告','CSMAR 借款表（日）· CNRDS 银行借款、委托贷款',false)}</div>
-   <div class="col"><div class="cat">新三板挂牌公司<span>NEEQ · SME</span></div>${node('n-annual','定期报告','年报 · 半年报附注','短期借款分类、受限资产、对外担保、关联方担保','无数据库 · 我们自建：分类汇总、逐笔、企业×银行',true)}${node('n-ann','公告','临时公告','申请银行授信或贷款（常带“暨关联交易”）、提供担保公告','无数据库 · 3 家示例 1,831 条',true)}</div>
+   <div class="col"><div class="cat">A 股上市公司<span>LISTED · MAIN BOARD</span></div>${node('a-annual','定期报告','年报 · 半年报','正文：担保、关联担保、受限资产；附注：借款按担保方式分类、部分单笔合约','CSMAR 借款统计表（半年度）：只有分类汇总数',false)}${node('a-ann','公告','临时公告','借款／授信公告、担保公告、委托贷款公告','CSMAR 借款表（日）· CNRDS 银行借款、委托贷款',false)}</div>
+   <div class="col"><div class="cat">新三板挂牌公司<span>NEEQ · SME</span></div>${node('n-annual','定期报告','年报 · 半年报','正文：担保、关联担保、受限资产（2022 年有逐笔专章）；附注：借款按担保方式分类','无数据库 · 我们自建：分类汇总、逐笔、企业×银行',true)}${node('n-ann','公告','临时公告','申请银行授信或贷款（常带“暨关联交易”）、提供担保公告','无数据库 · 3 家示例 1,831 条',true)}</div>
    <div class="col"><div class="cat">银行<span>BANKS · REGULATOR</span></div>${node('bank-annual','定期报告','年报 · 财务数据库','贷款总额与结构、五级分类、不良、拨备、集中度；只到银行—年','CSMAR 银行财务库 · 600 多家银行数据',false)}${node('bank','内部数据','监管报送 / 单行系统','全部企业、逐笔、脱敏；没有企业财务；不可复现','拿不到',true)}</div>
   </div>
   <div class="legend">每个板块含：<b>原始数据来源</b> · <b>面板数据处理</b>（全部字段、处理步骤） · <b>数据概述</b> · <b>相关顶刊文献</b>　｜　跨板块的变量定义见 <a href="#vars" style="color:var(--gold)">变量构造手册</a></div>
