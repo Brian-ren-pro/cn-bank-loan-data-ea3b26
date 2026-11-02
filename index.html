@@ -1004,12 +1004,59 @@ function renderPolicy(){setNav('policy');
   ${themes.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td></tr>`).join('')}
   </tbody></table></div></div>
 
-  <div class="block" id="q4"><div class="btitle"><span class="no">04</span><h3>第二部分（待做）：从政策热点到选题</h3><span class="sub">先不展开，等热点确认后再筛</span></div>
-  <div class="facts"><p>下一步才是选题：从上面 10 个热点里，筛出“有外生冲击、有明确时间与地区/企业变异、且我们的数据（新三板年报逐笔、企业×银行、披露比例）能接住”的 3—4 个，写成「政策热点 → 可做的问题 → 数据可行性 → 风险」。这一页先不动。</p></div></div>
+  <div class="block" id="q4"><div class="btitle"><span class="no">04</span><h3>从政策热点到选题设计</h3><span class="sub">五个机制维度 → 五个可做的选题</span></div>
+  <div class="warn"><b>选题设计思路：</b>用 2026 年 10 月的最新政策文件作为文章引言的政策高点与现实紧迫性背书，但用 2018—2025 年已经发生、且落在我们样本期内的前序同源政策作为准自然实验冲击（DID）。</div>
+  <div class="facts"><p>结合本页整理的 <b>7 场高层会议</b>与 <b>16 条 2026 年 9—11 月操作层动态</b>，站在商业银行信贷供给与银企契约签订的视角，当前顶层关注的核心矛盾收敛于五个机制维度：</p></div>
+  <div class="scrollx"><table class="vt" style="min-width:1000px"><thead><tr><th style="width:12%">热点聚类</th><th style="width:20%">2026 年 9—11 月核心文件与事件</th><th style="width:30%">涉银底层逻辑与对公信贷契约冲击</th><th style="width:22%">对应的前序同源政策冲击<br><span style="font-weight:400">（2018—2025 样本期内）</span></th><th style="width:10%">选题设计</th></tr></thead><tbody>
+  <tr><td><b>1. 账期治理与现金流重构</b></td><td>国办发〔2026〕24 号文（最长付款期 60 日、强制现金支付、严禁商票/电子凭证替代）；中央经济工作会议与政府工作报告“加紧清理拖欠企业账款”；维泰股份 2025-09“清欠账款专项贷款”公告实例</td><td><b>切断供应链融资套利，重塑担保结构：</b>过去链主企业强推商票和供应链电子债权凭证，迫使中小微企业拿应收账款/票据去银行做高息保理、贴现或质押借款，且因回款不确定，银行往往追加“实控人连带责任保证”。强制 60 日现金支付改善经营性现金流（网页变量 <code>经营现金流_资产比</code>），使企业摆脱被动型的“应收账款质押/票据贴现”，推动银行转向<b>纯信用贷款（<code>CreditShare</code> 上升）</b>并降低综合利息成本。</td><td>① 2020-09《保障中小企业款项支付条例》（首部立法）；<br>② 2024-10 中办国办《关于解决拖欠企业账款问题的意见》＋2024-11 地方政府化债置换落地；<br>③ 2025-06 修订版《条例》施行。</td><td><a href="javascript:void(0)" onclick="topicToggle('t1')" style="color:var(--gold);font-weight:600">选题设计 →</a></td></tr>
+  <tr><td><b>2. 贷款定价基准分层与利率传导</b></td><td>潘功胜 10-19 金融街论坛演讲第⑤条（财务能力强的企业可协商采用 DR001 或 LPR 定价，小微企业继续参考 LPR）；10 月 1Y LPR 3.0% vs 9 月 DR001 1.38%；政府工作报告“降低融资中间费用”</td><td><b>信贷定价从“统一基准”转向“按议价能力分层”：</b>DR001（1.38%）与 1Y LPR（3.0%）之间存在超过 160BP 的利差。大行下沉争抢优质中型企业时实际利率已明显低于 LPR（出现 LPR 减点），而议价能力弱、银行转换成本高的小微企业仍面临利率下调粘性，或遭遇非价格条款替代（降利率但加担保）。</td><td>① 2019-08 央行 LPR 形成机制改革（打破隐性下限）；<br>② 2020-08 存量浮动利率贷款定价基准批量转换；<br>③ 2024-09 金融监管总局将无还本续贷政策从小型企业阶段性扩围至中型企业。</td><td><a href="javascript:void(0)" onclick="topicToggle('t2')" style="color:var(--gold);font-weight:600">选题设计 →</a></td></tr>
+  <tr><td><b>3. 科技金融与软信息替代硬抵押</b></td><td>10-19《关于支持三大国际科技创新中心建设的金融指导意见》（2030 目标、全链条金融、耐心资本）；11-02 人民日报《以金融助力托举科研毅力》；四中全会“五篇大文章”</td><td><b>信贷评估从“看砖头”转向“看专利与资金流”：</b>传统银行面对科研长周期风险，高度依赖房产土地抵押（新三板抵质押占比 41%—44%）和实控人连带责任。政策通过“科技再贷款定向激励＋资金流信用信息共享平台降低信息不对称”，推动银行提高信用贷占比（<code>CreditShare</code>）并延长贷款期限（<code>Maturity</code>／<code>LBankloan</code>）。</td><td>① 2022-04 央行首设 2000 亿元“科技创新再贷款”（21 家全国性银行）；<br>② 2022-11 中关村、长三角、粤港澳等科创金融改革试验区方案；<br>③ 2024-04 5000 亿元科技创新和技术改造再贷款＋2024-10 央行资金流信用信息共享平台上线（对应 <code>接入日期</code> 变量）。</td><td><a href="javascript:void(0)" onclick="topicToggle('t3')" style="color:var(--gold);font-weight:600">选题设计 →</a></td></tr>
+  <tr><td><b>4. 财政金融协同（担保＋贴息＋分险）</b></td><td>10-28 财政金融协同支持中小微典型案例（担保增信＋流贷＋贴息）；2026 政府工作报告“设立 1000 亿元财政金融协同促内需专项资金，组合运用贷款贴息、融资担保、风险补偿”；10-16 居民房贷贴息（90/10）</td><td><b>外部公共增信对内部私人抵押的替代效应：</b>在资产价格调整导致不动产抵押品价值波动（姜可心等，2025）的背景下，单一商业化风控易产生惜贷。政策性融资担保公司介入提供本息保证（如网页同泰生物、中科国信案例中的高新担保、中关村科技担保），实质是以公共信用替代企业硬资产抵押与个人无限连带责任。</td><td>① 2020—2024 国家融资担保基金“总对总”批量担保业务各省分批落地；<br>② 2022—2024 各省市“政采贷”与绿贷/科创贴息政策分批扩围（余明桂等，2025；王怀明等，2026）。</td><td><a href="javascript:void(0)" onclick="topicToggle('t4')" style="color:var(--gold);font-weight:600">选题设计 →</a></td></tr>
+  <tr><td><b>5. 中小银行“减量提质”与风险处置</b></td><td>10-22 金融监管总局国际咨询委员会（机构风险处置、AI 衍生风险）；四中全会、中央经济工作会议、全国金融系统工作会议、监管总局会议连续强调“稳妥推进中小金融机构减量提质、合理优化机构布局、严防爆雷”</td><td><b>银行端供给冲击与关系型信贷重构：</b>地方法人银行在新三板企业贷款中占比 32%—38.7%。当村镇银行被主发起行“村改支”吸收合并、城商行合并重组或省联社统一法人改革时，原有基层审批权上收，短期内可能改变依赖“软信息”的存量关系型借款人的信贷可得性与契约条款。</td><td>① 2020—2022 城商行合并重组潮（四川银行、山西银行、辽沈银行、中原银行）；<br>② 2022—2025 省联社改制（浙江、辽宁、海南、河南、山西、四川等）与村镇银行“村改支”吸收合并。</td><td><a href="javascript:void(0)" onclick="topicToggle('t5')" style="color:var(--gold);font-weight:600">选题设计 →</a></td></tr>
+  </tbody></table></div>
+
+  <div class="topic-card facts" id="t1" style="display:none;margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h6 style="margin:0">选题一：商业信用规制、回款现金化与中小企业信贷契约去抵押化</h6><a href="javascript:void(0)" onclick="topicToggle('t1')" style="color:var(--dim);font-size:11px">收起 ✕</a></div>
+  <p><b>政策背景与引言切入：</b>以国办发〔2026〕24 号（引导大型企业 60 日最长付款期、强制现金支付、禁用商票与电子凭证替代）及中央经济工作会议“加紧清理拖欠企业账款”为政策高点；结合新三板公告中的“清欠账款专项贷款”实例（如维泰股份 2025-09 公告），说明商业信用回款质量对信贷契约结构的决定作用。</p>
+  <p><b>识别策略（DID）：</b>样本 2018—2025 年新三板年度面板；外生冲击为 2020-09《保障中小企业款项支付条例》施行、2024-10 清欠意见与 2024-11 地方化债落地、2025-06 修订版《条例》施行；按企业事前“（应收账款＋应收票据）/营业收入”或对机关、国企及大客户应收占比构造连续处理强度 Treat×Post。</p>
+  <p><b>核心变量与机制：</b>被解释变量取 <code>变量面板.csv</code> 的信用借款占比 <code>CreditShare</code>、抵质押占比 <code>CollShare</code>、保证占比 <code>GuarShare</code>、附注未终止确认的票据贴现/保理规模占比，以及综合借款成本 <code>COD</code>。机制聚焦经营现金流改善（<code>经营现金流_资产比</code>、应收账款周转率）与回款确定性提升对硬抵押品的替代。</p>
+  <p><b>稳健性与识别风险：</b>分 2018—2022（首轮立法）与 2022—2025（刚性清欠与化债）两个子窗口估计；全样本纳入行业×年份、省份×年份高维固定效应，控制同期宏观货币环境差异。</p></div>
+
+  <div class="topic-card facts" id="t2" style="display:none;margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h6 style="margin:0">选题二：利率并轨、企业议价能力与中小企业贷款定价粘性</h6><a href="javascript:void(0)" onclick="topicToggle('t2')" style="color:var(--dim);font-size:11px">收起 ✕</a></div>
+  <p><b>政策背景与引言切入：</b>直接呼应潘功胜 2026-10-19 金融街论坛演讲（财务能力较强的企业可协商采用 DR001 或 LPR 定价，小微企业继续参考 LPR）及 DR001（1.38%）与 1Y LPR（3.0%）之间的利差；2026 年政府工作报告要求“规范信贷市场经营行为，降低融资中间费用”。</p>
+  <p><b>识别策略（DID）：</b>样本为 2017—2022 年新三板年报“第八节：银行及非银行金融机构间接融资发生情况”的逐笔贷款面板（该区间挂牌公司按统一规则列示发放机构、金额、起止日、利率与贷款方式），并延伸结合 2023—2025 年披露具体利率及加减点（如“LPR+15Bp”“LPR−30Bp”）的样本。冲击为 2019-08 LPR 形成机制改革与 2020-08 存量浮动利率贷款定价基准转换；处理组按改革前企业在原 LPR 报价行（或全国性大型银行）的贷款余额占比、以及单一银行依赖度（转换成本）构造。</p>
+  <p><b>核心变量与机制：</b>① 贷款利差 <code>Spread</code> 与浮动幅度 <code>Floating</code>（逐笔实际年利率减同期同档基准利率或 LPR）；② 非价格条款替代：期限 <code>Maturity</code> 与信用增级序数 <code>Enhancement</code>（0—3），检验银行下调名义利率时是否通过缩短期限或提高保证/抵质押要求补偿风险；③ 借款成本度量比较：报表 <code>COD</code> 与逐笔加权利率对比，量化非银带息负债（票据贴现、融资租赁等）对财务成本指标的构成影响。</p>
+  <p><b>稳健性与识别风险：</b>2017—2022 年样本来自年报固定结构表全量合约，不受自愿披露门槛影响；2023—2025 年延伸样本用“披露比例 ≥0.9”的完整披露企业子样本，并以 Heckman 两步法做稳健性校准。</p></div>
+
+  <div class="topic-card facts" id="t3" style="display:none;margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h6 style="margin:0">选题三：数字征信共享、科技再贷款与中小企业信贷担保转型</h6><a href="javascript:void(0)" onclick="topicToggle('t3')" style="color:var(--dim);font-size:11px">收起 ✕</a></div>
+  <p><b>政策背景与引言切入：</b>以 2026-10-19《关于支持三大国际科技创新中心建设的金融指导意见》（2030 年完善科技创新全链条金融服务、耐心资本与风险可控）与 11-02《人民日报》“以金融助力托举科研毅力”评论为切入点，聚焦轻资产科创企业（新三板样本固定资产与无形资产占总资产比重 <code>Tangible</code> 中位数约 14.9%）如何突破传统不动产抵押依赖。</p>
+  <p><b>识别策略（DID）：</b>样本 2020—2025 年新三板年度面板、逐笔贷款（33,180 笔）与企业×银行配对（51,550 对）。双维度冲击：A. 2022-04 央行设立 2000 亿元科技创新再贷款（21 家全国性银行）、2024-04 整合设立 5000 亿元科技创新和技术改造再贷款；B. 2024-10-25 全国中小微企业资金流信用信息共享平台上线、各法人银行分批接入（直接调用 <code>接入日期</code> 字段）。构造“科技型企业属性×事前全国性银行信贷依赖度×政策时点”的双重/三重差分。</p>
+  <p><b>核心变量与机制：</b>① 担保结构与期限转型：企业年 <code>CreditShare</code>、<code>CollShare</code>、长期借款占比 <code>LBankloan</code>；② 抵质押物内部结构替代：用逐笔 <code>担保说明</code>（有值约 88.7%）与年报“受限资产”明细，区分“房屋建筑物及土地使用权抵押”与“专利权/知识产权质押”。</p>
+  <p><b>稳健性与识别风险：</b>在企业×银行×年面板中，对同一年度向多家银行借款的企业控制“企业×年份固定效应”，比较同一企业同期从“已接入资金流平台银行（或再贷款合格银行）”与“其他银行”获得的贷款契约差异，剥离企业侧信贷需求变化。</p></div>
+
+  <div class="topic-card facts" id="t4" style="display:none;margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h6 style="margin:0">选题四：政府性融资担保介入对私人担保契约的替代效应（兼论贷款披露选择性）</h6><a href="javascript:void(0)" onclick="topicToggle('t4')" style="color:var(--dim);font-size:11px">收起 ✕</a></div>
+  <p><b>政策背景与引言切入：</b>2026 年政府工作报告“设立 1000 亿元财政金融协同促内需专项资金，组合运用贷款贴息、融资担保、风险补偿”；2026-10-28《人民日报》专题报道财政金融协同支持中小微企业（担保增信＋流贷＋财政贴息）典型模式。</p>
+  <p><b>研究问题：</b>中小企业借款中普遍存在内部人增信（逐笔样本中 74% 含保证条款，常见为实控人、控股股东及配偶提供个人无限连带责任保证）。当政府性融资担保机构介入提供外部增信时，银行究竟是相应豁免不动产抵押与实控人个人连带责任（增信替代），还是同时要求个人反担保与资产抵押（增信叠加）？</p>
+  <p><b>识别与文本识别：</b>样本 2020—2025 年逐笔贷款、临时公告与企业年度面板；结合 2020—2025 年国家融资担保基金“总对总”批量担保业务各省分批扩面及地方财政贴息政策，用逐笔 <code>担保说明</code> 提取担保主体类型，区分“政府性融资担保公司/科技担保公司保证”“实控人及关联方保证”“企业自有资产抵质押”。</p>
+  <p><b>核心变量与披露选择性：</b>① 实控人个人连带保证发生率与不动产抵押率；② 综合增信序数 <code>Enhancement</code> 与 <code>COD</code>。利用本数据集构建的“披露比例（逐笔期末余额合计 ÷ 附注借款合计）”与 2023 年新三板年报模板取消“第八节间接融资情况”强制专章这一制度变化，检验外部增信与契约条款对企业自愿披露逐笔贷款行为的影响，并用披露比例 ≥0.9 的子样本复核主结论。</p></div>
+
+  <div class="topic-card facts" id="t5" style="display:none;margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:baseline"><h6 style="margin:0">选题五：中小银行合并重组、关系型信贷重构与中小企业融资</h6><a href="javascript:void(0)" onclick="topicToggle('t5')" style="color:var(--dim);font-size:11px">收起 ✕</a></div>
+  <p><b>政策背景与引言切入：</b>二十届四中全会、中央经济工作会议、全国金融系统工作会议、金融监管总局 2026 年工作会议、2026 年政府工作报告以及 2026-10-22 金融监管总局国际咨询委员会，持续把“稳妥推进地方中小金融机构减量提质、合理优化机构布局、及时处置机构风险”列为重点。</p>
+  <p><b>识别策略（多时点交错 DID）：</b>样本 2019—2025 年企业年度面板与企业×银行关系面板（51,550 对）；冲击为 2020—2025 年分批发生的三类事件：① 城商行合并新设或吸收合并（四川银行、山西银行、辽沈银行、中原银行等）；② 省联社改制与农商联合银行组建（浙江、辽宁、海南、河南、山西、四川、广西等）；③ 村镇银行吸收合并（“村改支”“村改分”）。用于锁定处理组的银企关系需用 2022 年以前年报第八节的全量关系。</p>
+  <p><b>竞争性机制：</b>① 审批权上收与软信息损耗：法人资格转为分支行后，本地软信息关系型授信受更严格的集中风控约束，可能导致信贷缩减、银行转换（<code>Switch</code>）或抵押要求提高；② 资本改善与协同赋能：合并后不良率下降、资本充足率提升（匹配网页“银行·定期报告”的 600 余家银行财务数据库），资金成本下降，可能降低存量优质客户利率 <code>COD</code> 并增加中长期信贷 <code>LBankloan</code>。</p>
+  <p><b>稳健性：</b>采用异质性稳健的多时点 DID 估计量（Callaway &amp; Sant'Anna, 2021），控制城市×年份（或省份×年份）固定效应，仅在同一地区内部比较“事前依赖涉改中小银行的企业”与“事前依赖未涉改银行的企业”，排除区域经济波动对银行重组与企业融资的共同影响。</p></div>
+
+  <div class="facts" style="margin-top:14px"><p><b>说明：</b>上面五个选题的“前序同源政策冲击”都在 2018—2025 样本期内，2026 年 9—11 月的政策文件只用于引言与机制解释，不作为识别用的冲击（避免政策与样本期重叠导致的预期效应）。</p></div></div>
 
   <div class="block" id="q5"><div class="btitle"><span class="no">05</span><h3>来源</h3><span class="sub">2026-11-02 检索；操作层部分来自本地 vault 每日精读（2026-10-12—10-31）</span></div>
   <div class="facts"><p>① 四中全会《十五五规划建议》：<a href="https://hhzb.huainannet.com/content/202510/29/content_197325.html" target="_blank">转载</a>；② 中央经济工作会议：<a href="https://m.hexun.com/news/2025-12-11/222753306.html" target="_blank">转载</a>；③ 全国金融系统工作会议：<a href="http://ipaper.ce.cn/pc/content/202512/13/content_325177.html" target="_blank">经济日报</a>；④ 金融监管总局 2026 年监管工作会议：<a href="http://www.jingjiribao.cn/static/detail.jsp?id=632491" target="_blank">经济日报</a>；⑤ 2026 年政府工作报告：<a href="http://www.ykd.com.cn/pc/con/202603/16/content_69709.html" target="_blank">转载</a>；⑥ 中央金融工作会议（2023）：<a href="http://www.sxdygbjy.gov.cn/xxkt/2026n10y/tjpm/art/2026/art_71344f9907ef44c4b7ef62c710fe85f0.html" target="_blank">转载</a>；⑦ 潘功胜 2026 金融街论坛演讲：<a href="https://www.safe.gov.cn/big5/big5/www.safe.gov.cn/safe/2026/1019/27999.html" target="_blank">外汇局刊载全文</a>；⑧ 潘功胜 IMFC 发言：<a href="https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/2026101715340431532/index.html" target="_blank">人民银行</a>；⑨ 三季度贷款投向：<a href="https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/2026102815121914211/index.html" target="_blank">人民银行</a>；⑩ 新型政策性金融工具投放：<a href="https://www.gov.cn/yaowen/liebiao/202610/content_7084409.htm" target="_blank">中国政府网</a>。正式引用前请以新华社/部委原文核对。</p></div></div>
   </section>`;
+}
+
+function topicToggle(id){
+  document.querySelectorAll('.topic-card').forEach(c=>{ if(c.id!==id) c.style.display='none'; });
+  const el=document.getElementById(id); if(!el) return;
+  el.style.display = (el.style.display==='block') ? 'none' : 'block';
+  if(el.style.display==='block') el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 /* ============ 披露选择性 ============ */
