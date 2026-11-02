@@ -54,7 +54,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .homesec h3{font-family:"Songti SC",Georgia,serif;font-size:21px;letter-spacing:.08em;margin-bottom:6px}
 .homesec .sub{color:var(--dim);font-size:12px;margin-bottom:18px;line-height:1.8}
 .scrollx{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:rgba(255,255,255,.03)}
-.cmp{width:100%;border-collapse:collapse;font-size:12px;min-width:980px}
+.cmp{width:100%;border-collapse:collapse;font-size:12px;min-width:1120px}
 .cmp th{background:rgba(255,255,255,.05);color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.06em;padding:10px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
 .cmp td{padding:10px 10px;border-bottom:1px solid var(--line2);color:#c8d5e3;line-height:1.6;vertical-align:top}
 .cmp tr:hover td{background:rgba(216,178,106,.05)}
@@ -62,7 +62,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .cmp td.src a{color:#f2f7fd;text-decoration:none;font-weight:600}
 .cmp td.src a:hover{color:var(--gold)}
 .cmp td.src small{display:block;color:var(--dim);font-weight:400;font-size:10.5px}
-.cmp td.c{text-align:center;white-space:nowrap}
+.cmp td.c{text-align:center}
 .sy{color:var(--green);font-weight:700}.sp{color:var(--gold);font-weight:700}.sn{color:#5f7189}
 .cmp td.c small{display:block;font-size:10px;color:var(--dim)}
 .keyline{margin-top:12px;font-size:11.5px;color:var(--dim)}
@@ -164,6 +164,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .dv span em{font-style:normal;color:var(--dim);margin-left:3px}
 .ex{font-size:11px;color:#9fb2c6;font-family:"SF Mono",Menlo,monospace;word-break:break-all}
 .nm{font-size:11px;color:#cdd8e4;font-family:"SF Mono",Menlo,monospace;white-space:nowrap}
+.rz{position:absolute;top:0;right:-3px;width:7px;height:100%;cursor:col-resize;z-index:2}
+.rz:hover,.rz.on{background:rgba(216,178,106,.45)}
+th.rzh{position:relative}
 /* 处理漏斗 */
 .funnel{border:1px solid var(--line);border-radius:3px;padding:14px 16px;background:rgba(255,255,255,.03)}
 .fs{display:grid;grid-template-columns:28px 230px 1fr 92px 82px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line2);font-size:12px}
@@ -799,6 +802,20 @@ function matrixHTML(m){
   return `<div class="scrollx"><table class="cmp" style="min-width:640px"><thead><tr><th>字段</th>${m.cols.map(c=>`<th style="text-align:center">${c}</th>`).join('')}</tr></thead><tbody>${m.rows.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(v=>`<td class="c">${sym[v]}</td>`).join('')}</tr>`).join('')}</tbody></table></div><div class="cap">${m.foot}</div>`;
 }
 
+function makeResizable(root){
+  root.querySelectorAll('table.cmp,table.ft,table.vt').forEach(tb=>{
+    tb.querySelectorAll('thead th').forEach(th=>{
+      if(th.querySelector('.rz'))return;
+      if(getComputedStyle(th).position==='static')th.classList.add('rzh');
+      const h=document.createElement('span');h.className='rz';h.title='拖动调整列宽';th.appendChild(h);
+      h.addEventListener('mousedown',e=>{e.preventDefault();e.stopPropagation();const x0=e.clientX,w0=th.getBoundingClientRect().width;h.classList.add('on');
+        const mv=ev=>{const w=Math.max(48,w0+ev.clientX-x0);th.style.width=w+'px';th.style.minWidth=w+'px';};
+        const up=()=>{h.classList.remove('on');document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);};
+        document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);});
+      h.addEventListener('dblclick',()=>{th.style.width='';th.style.minWidth='';});
+    });
+  });
+}
 /* ============ 首页 ============ */
 function setNav(w){document.getElementById('navHome').classList.toggle('on',w==='home');document.getElementById('navVars').classList.toggle('on',w==='vars');}
 function cell(v){const [t,txt]=v.split(':');const s={y:'<span class="sy">●</span>',p:'<span class="sp">◐</span>',n:'<span class="sn">○</span>'}[t];return `<td class="c">${s}${txt?`<small>${txt}</small>`:''}</td>`;}
@@ -813,7 +830,7 @@ function renderHome(){setNav('home');
   </div>
   <div class="legend">每个板块含：<b>原始数据来源</b> · <b>面板数据处理</b>（全部字段、处理步骤） · <b>数据概述</b> · <b>相关顶刊文献</b>　｜　跨板块的变量定义见 <a href="#vars" style="color:var(--gold)">变量构造手册</a></div>
   <div class="homesec"><h3>银行贷款相关的六类数据</h3><div class="sub">每一行是一种来源，与上面的树一一对应；同一来源的汇总数和逐笔数据合在一行。按字段比较：“新三板 · 定期报告”和“A 股 · 公告”的百分比是该字段在全表中有值的比例；其他格子按数据说明或文献判断。点击名称进入对应板块。</div>
-   <div class="scrollx"><table class="cmp"><thead><tr><th>数据</th><th>现成数据库</th><th>一行是</th><th>额度还是余额</th><th>年份</th><th>规模</th>${CMPH.map(h=>`<th style="text-align:center">${h}</th>`).join('')}</tr></thead><tbody>${CMP.map(r=>`<tr><td class="src"><a href="#${r.k}">${r.name}</a></td><td>${r.db}</td><td>${r.unit}</td><td>${r.scope}</td><td style="white-space:nowrap">${r.yrs}</td><td>${r.size}</td>${r.f.map(cell).join('')}</tr>`).join('')}</tbody></table></div>
+   <div class="scrollx"><table class="cmp"><thead><tr><th style="min-width:108px">数据</th><th style="min-width:170px">现成数据库</th><th style="min-width:110px">一行是</th><th style="min-width:145px">额度还是余额</th><th style="min-width:92px">年份</th><th style="min-width:118px">规模</th>${CMPH.map(h=>`<th style="text-align:center;min-width:60px;white-space:normal">${h}</th>`).join('')}</tr></thead><tbody>${CMP.map(r=>`<tr><td class="src"><a href="#${r.k}">${r.name}</a></td><td>${r.db}</td><td>${r.unit}</td><td>${r.scope}</td><td>${r.yrs}</td><td>${r.size}</td>${r.f.map(cell).join('')}</tr>`).join('')}</tbody></table></div>
    <div class="keyline"><span><span class="sy">●</span> 有</span><span><span class="sp">◐</span> 部分有或口径受限</span><span><span class="sn">○</span> 没有</span></div>
   </div>
   <div class="homesec"><h3>三个读数据时最容易出错的地方</h3><div class="rules" style="grid-template-columns:1fr 1fr 1fr">
@@ -848,7 +865,7 @@ function renderDetail(key){const s=S[key];if(!s){go('');return;}setNav('');fs={j
   app.innerHTML=`<section class="view"><div class="hero2"><div class="crumb">总览 / <b>${s.crumb}</b></div><h2>${s.title}</h2><div class="lead">${s.lead}</div></div><div class="secnav"><button data-t="s1">① 来源</button><button data-t="s2">② 数据</button>${hasOv?'<button data-t="s3">③ 概述</button>':''}<button data-t="s4">${hasOv?'④':'③'} 文献</button></div><div class="block" id="s1"><div class="btitle"><span class="no">${s.no}.1</span><h3>原始数据来源</h3></div>${b1}${s.facts?`<div class="facts">${s.facts}</div>`:''}</div><div class="block" id="s2"><div class="btitle"><span class="no">${s.no}.2</span><h3>面板数据处理</h3></div>${b2}</div>${ovHTML}<div class="block" id="s4"><div class="btitle"><span class="no">${s.no}.${nW}</span><h3>相关顶刊文献</h3></div>${s.deep?`<div class="deep">${s.deep}</div>`:''}<div id="toolbar"></div><div id="pgrid"></div></div></section>`;
   app.querySelectorAll('.shot,.chart').forEach(el=>el.addEventListener('click',()=>openLB(el.dataset.full)));
   app.querySelectorAll('.secnav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth',block:'start'})));
-  app.querySelectorAll('.ttab').forEach(b=>b.addEventListener('click',()=>{app.querySelectorAll('.ttab').forEach(x=>x.classList.toggle('on',x===b));app.querySelectorAll('.tpanel').forEach(p=>p.classList.toggle('on',p.dataset.panel===b.dataset.tab));}));
+  app.querySelectorAll('.ttab').forEach(b=>b.addEventListener('click',()=>{app.querySelectorAll('.ttab').forEach(x=>x.classList.toggle('on',x===b));app.querySelectorAll('.tpanel').forEach(p=>p.classList.toggle('on',p.dataset.panel===b.dataset.tab));makeResizable(app);}));
   bindFT(app);
   renderPapers(s);}
 function renderPapers(s){const tb=document.getElementById('toolbar'),grid=document.getElementById('pgrid');
@@ -861,7 +878,7 @@ function renderPapers(s){const tb=document.getElementById('toolbar'),grid=docume
   draw();}
 let CUR=(location.hash||'').replace(/^#\/?/,'');
 function go(h){CUR=h;try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}route();}
-function route(){const h=CUR;modal.classList.remove('on');lb.classList.remove('on');window.scrollTo({top:0});if(!h)renderHome();else if(h==='vars')renderVars();else renderDetail(h);}
+function route(){const h=CUR;modal.classList.remove('on');lb.classList.remove('on');window.scrollTo({top:0});if(!h)renderHome();else if(h==='vars')renderVars();else renderDetail(h);makeResizable(app);}
 window.addEventListener('hashchange',()=>{CUR=location.hash.replace(/^#\/?/,'');route();});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;e.preventDefault();go(a.getAttribute('href').replace(/^#\/?/,''));});
 route();
