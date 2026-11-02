@@ -121,6 +121,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .facts p{margin-top:10px;font-size:12px;color:#9db0c6;line-height:1.9}
 .facts p b{color:#fff}
 .lv{display:inline-block;font-size:10px;line-height:1.5;padding:1px 7px;margin-left:8px;border-radius:2px;color:var(--gold);background:rgba(216,178,106,.12);border:1px solid rgba(216,178,106,.38);letter-spacing:.06em;vertical-align:middle}
+.lv.lvloan{color:#ff7b72;background:rgba(255,99,99,.16);border-color:rgba(255,99,99,.6);font-weight:600}
 .lv.lvs{color:#8fc0e8;background:rgba(118,169,214,.12);border-color:rgba(118,169,214,.4)}
 .lvlegend{font-size:11.5px;color:var(--dim);margin:-4px 0 14px;line-height:1.9}
 .lvlegend b{color:var(--gold);font-weight:600}
@@ -258,7 +259,7 @@ th.rzh{position:relative}
 <div class="wrap">
   <div class="topbar">
     <div class="brand"><span class="mark"></span><h1>中国银行贷款数据</h1><small>DATA SOURCES</small></div>
-    <div class="topnav"><a class="back" id="navHome" href="#">总览</a><a class="back" id="navVars" href="#vars">变量构造手册</a></div>
+    <div class="topnav"><a class="back" id="navHome" href="#">总览</a><a class="back" id="navVars" href="#vars">变量构造手册</a><a class="back" id="navSel" href="#sel">披露选择性</a></div>
   </div>
   <main id="app"></main>
 </div>
@@ -730,8 +731,8 @@ function stHTML(id){
   if(st.rows&&st.rows.length){t=`<table class="stbl"><thead><tr><th>变量</th><th>样本量</th><th>均值</th><th>标准差</th><th>最小值</th><th>最大值</th></tr></thead><tbody>`+st.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')+`</tbody></table>`;}
   return `<div class="msec"><b>STAT · 描述统计</b>${t}${st.note?`<p class="stnote">${st.note}</p>`:''}</div>`;
 }
-function openPaper(id){const x=P[id];mcard.innerHTML=`<div class="mvenue"><span class="j">《${x.v}》</span><span class="y">${x.y}</span>${x.lv?`<span class="lv">${x.lv}</span>`:""}${x.sel?`<span class="lv lvs">披露</span>`:""}</div><h3>${x.t}</h3><div class="mauth">${x.a}</div><div class="msec"><b>ABSTRACT · 摘要</b><p>${x.ab}</p></div><div class="msec"><b>DATA · 数据来源</b><p>${x.dd}</p></div>${x.sel?`<div class="msec"><b>SELECTION · 自选择披露与稳健性</b><p>${x.sel}</p></div>`:""}<div class="msec"><b>FIELDS · 字段与用法</b><p>${FD[id]||''}</p></div>${stHTML(id)}<button class="mclose" onclick="document.getElementById('modal').classList.remove('on')">关闭</button>`;modal.classList.add('on');}
-function paperHTML(id){const x=P[id];return `<div class="paper" data-id="${id}"><div class="stack"><div class="bg b1"></div><div class="bg b2"></div><div class="sheet"><div class="venue"><span class="j">《${x.v}》</span><span class="y">${x.y}</span>${x.lv?`<span class="lv">${x.lv}</span>`:""}${x.sel?`<span class="lv lvs">披露</span>`:""}</div><h5>${x.t}</h5><div class="abs">ABSTRACT</div><div class="auth">${x.a}</div></div></div><div class="pmeta"><div class="ab">${x.ab}</div><div class="dd"><b>字段</b>${FD[id]||x.dd}</div><div class="more">点击展开：摘要、数据、字段、描述统计 →</div></div></div>`;}
+function openPaper(id){const x=P[id];mcard.innerHTML=`<div class="mvenue"><span class="j">《${x.v}》</span><span class="y">${x.y}</span>${x.lv?`<span class="lv ${x.lv==="贷款"?"lvloan":""}">${x.lv}</span>`:""}${x.sel?`<span class="lv lvs">披露</span>`:""}</div><h3>${x.t}</h3><div class="mauth">${x.a}</div><div class="msec"><b>ABSTRACT · 摘要</b><p>${x.ab}</p></div><div class="msec"><b>DATA · 数据来源</b><p>${x.dd}</p></div>${x.sel?`<div class="msec"><b>SELECTION · 自选择披露与稳健性</b><p>${x.sel}</p></div>`:""}<div class="msec"><b>FIELDS · 字段与用法</b><p>${FD[id]||''}</p></div>${stHTML(id)}<button class="mclose" onclick="document.getElementById('modal').classList.remove('on')">关闭</button>`;modal.classList.add('on');}
+function paperHTML(id){const x=P[id];return `<div class="paper" data-id="${id}"><div class="stack"><div class="bg b1"></div><div class="bg b2"></div><div class="sheet"><div class="venue"><span class="j">《${x.v}》</span><span class="y">${x.y}</span>${x.lv?`<span class="lv ${x.lv==="贷款"?"lvloan":""}">${x.lv}</span>`:""}${x.sel?`<span class="lv lvs">披露</span>`:""}</div><h5>${x.t}</h5><div class="abs">ABSTRACT</div><div class="auth">${x.a}</div></div></div><div class="pmeta"><div class="ab">${x.ab}</div><div class="dd"><b>字段</b>${FD[id]||x.dd}</div><div class="more">点击展开：摘要、数据、字段、描述统计 →</div></div></div>`;}
 function cardRows(c){return c.rows.map(r=>`<div class="row"><div class="k">${r[0]}</div><div>${r[1]}</div></div>`).join('')+`<div class="chips">${c.chips.map(x=>`<span class="chip">${x}</span>`).join('')}</div>`;}
 function statsHTML(c){return `<div class="stats">${c.stats.map(s=>`<div class="stat"><div class="n">${s[0]}</div><div class="l">${s[1]}</div></div>`).join('')}</div><div class="note">${c.note}</div>`;}
 function fillHTML(f,pos){const cls=f<30?'lo':(f<70?'md':'');return `<div class="fill"><i><b class="${cls}" style="width:${Math.max(1,f)}%"></b></i><em>${f}%</em></div>${pos!=null&&pos<f-1?`<small>其中大于 0：${pos}%</small>`:''}`;}
@@ -840,7 +841,7 @@ function makeResizable(root){
   });
 }
 /* ============ 首页 ============ */
-function setNav(w){document.getElementById('navHome').classList.toggle('on',w==='home');document.getElementById('navVars').classList.toggle('on',w==='vars');}
+function setNav(w){document.getElementById('navHome').classList.toggle('on',w==='home');document.getElementById('navVars').classList.toggle('on',w==='vars');document.getElementById('navSel').classList.toggle('on',w==='sel');}
 function cell(v){const [t,txt]=v.split(':');const s={y:'<span class="sy">●</span>',p:'<span class="sp">◐</span>',n:'<span class="sn">○</span>'}[t];return `<td class="c">${s}${txt?`<small>${txt}</small>`:''}</td>`;}
 function renderHome(){setNav('home');
   const node=(href,tag,h4,p,db,none)=>`<a class="node" href="#${href}"><span class="tag">${tag}</span><h4>${h4}</h4><p>${p}</p><span class="db ${none?'none':''}">${db}</span><span class="arrow">→</span></a>`;
@@ -869,6 +870,80 @@ function renderVars(){setNav('vars');
   <div class="block" id="vd"><div class="btitle"><span class="no">DIMENSIONS</span><h3>贷款的五个维度</h3><span class="sub">每个维度：有哪些类别、在哪类材料里看到、我们的数据怎么记</span></div>${DIMS.map((d,i)=>`<div class="vgroup"><h4>${i+1}. ${d.h}</h4><div class="gsub">${d.s}</div><div class="scrollx"><table class="vt" style="min-width:760px"><thead><tr><th style="width:20%">类别</th><th style="width:40%">在哪类材料里看到</th><th>我们的数据怎么记</th></tr></thead><tbody>${d.rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}<div class="warn"><b>同一个问题换个统计单位，答案会变：</b>“哪种担保最多”，按逐笔笔数是保证（33,180 笔中 74% 带保证，可多选）；按企业—年面板的金额是抵质押（2023—2025 年 41%—44%，保证 29%—30%，信用 19%—22%）。说结论时要同时说清维度和统计单位。</div></div>
   ${VG.map((g,i)=>`<div class="vgroup block" id="vg${i}"><h4>${g.h}</h4><div class="gsub">${g.s}</div><div class="scrollx"><table class="vt"><thead><tr><th>变量</th><th>定义 / 公式</th><th>用到的字段</th><th>文献（描述统计）</th><th>注意</th></tr></thead><tbody>${g.rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td class="w">${r[4]}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}
   <div class="block" id="vr"><div class="btitle"><span class="no">RULES</span><h3>通用处理规则</h3><span class="sub">文献里反复出现的清洗步骤</span></div><div class="rules">${RULES.map(r=>`<div>${r}</div>`).join('')}</div></div></section>`;
+  app.querySelectorAll('.secnav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth',block:'start'})));
+}
+
+
+/* ============ 披露选择性 ============ */
+function renderSel(){setNav('sel');
+  app.innerHTML=`<section class="view">
+  <div class="hero2"><div class="crumb">总览 / <b>披露选择性</b></div><h2>披露选择性：逐笔贷款怎么和报表余额对上</h2>
+  <div class="lead">用逐笔贷款（利率、期限、担保等合约层面字段）做研究，样本永远只是“被披露出来的那部分合约”。这一页整理：我们看的 21 篇文献里谁说了、怎么说、怎么处理；现有处理的局限；我们在采纳它们之外还能做什么；以及 2026-11-02 在 CNKI 和网上的补充检索记录。</div></div>
+
+  <div class="block" id="s1"><div class="btitle"><span class="no">01</span><h3>文献里怎么说、怎么处理</h3><span class="sub">21 篇用了逐笔/贷款层面数据的文章</span></div>
+  <div class="facts"><p><b>先分清三种“选择性”：</b>① <b>披露选择性</b>——企业只在年报附注/公告里列一部分贷款（通常是大额、有担保的），其余看不到；② <b>银企匹配选择性</b>——好企业挑好银行，不是数据缺失；③ <b>处理分组非随机</b>——政策名单、申报评选造成处理组自选择。文献里绝大多数“选择性”说的是 ②③，不是 ①。</p></div>
+  <div class="scrollx"><table class="vt" style="min-width:900px"><thead><tr><th style="width:24%">论文</th><th style="width:26%">用到的贷款数据</th><th style="width:16%">讲披露选择性？</th><th>怎么处理</th></tr></thead><tbody>
+  <tr><td colspan="4" style="color:var(--gold)">A. 真正谈“贷款披露选择性”的（2 篇）</td></tr>
+  <tr><td>李逸飞等 2022，中国工业经济</td><td>CSMAR 贷款库 127,254 条；机制用逐笔记录</td><td>是</td><td>明确承认“企业披露的贷款信息也具备选择性”；优质/非优质企业组间银行特征差异检验＋PSM＋IV</td></tr>
+  <tr><td>李广子等 2025，金融评论</td><td>手工逐笔合约，1,206 家、8,712 笔</td><td>是（唯一正面讨论）</td><td>论证选择发生在企业层、与银行层解释变量正交，故不校正；多银行借款子样本＋控制信用增级＋IV；脚注承认只披露“金额较大的合约”</td></tr>
+  <tr><td colspan="4" style="color:var(--gold)">B. 做了 Heckman，但选择变量不是“是否披露这笔贷款”（2 篇）</td></tr>
+  <tr><td>彭红枫、张景静 2026，金融研究</td><td>CNRDS 公告日度→企业×银行×年</td><td>隐含（银企匹配）</td><td>Heckman 两步法（选择变量＝是否银行贷款客户）＋PSM；回归剔除未披露期限的样本</td></tr>
+  <tr><td>张景静、胡金焱 2025，世界经济</td><td>CSMAR 借款表 211,499 条→7,436 个企业年</td><td>是（但针对 CSR 报告）</td><td>未发 CSR 报告的企业被排除→Heckman 两步法；银行自选择→PSM；三重 IV</td></tr>
+  <tr><td colspan="4" style="color:var(--gold)">C. 用银行/监管全量数据，从设计上回避披露问题（4 篇）</td></tr>
+  <tr><td>曹廷求、庞念伟 2025，金融研究</td><td>东部某省全部银行逐笔贷款（银企—月）</td><td>不适用（数据全量）</td><td>申报评选自选择→PSM-DID（1:2）＋500 次安慰剂</td></tr>
+  <tr><td>姜可心等 2025，金融研究</td><td>某股份行内部全量对公贷款 20 万笔</td><td>不适用</td><td>以“系统性重要银行、覆盖 78% 城市/95% 贷款笔数”论证代表性；房价 IV</td></tr>
+  <tr><td>佘楷文等 2025，管理世界</td><td>某省监管报送全量未清偿贷款（季度）</td><td>不适用</td><td>优质企业选址科技支行→开业前企业子样本、平衡面板</td></tr>
+  <tr><td>张甜、刘一鸣 2025，金融研究</td><td>某省全部金融机构逐笔贷款 17.5 万笔</td><td>回避</td><td>数据本身覆盖全部机构；仅承认上市公司披露子样本有限，未做校正</td></tr>
+  <tr><td colspan="4" style="color:var(--gold)">D. 隐式处理：把“没披露”当成 0 或截断（2 篇）</td></tr>
+  <tr><td>王怀明、王思远 2026，会计研究</td><td>企业贷款公告识别绿色信贷→企业—年</td><td>未讨论</td><td>未公告企业按 0 进公司—年面板（ln(1+金额) 让零值合法）；异质性稳健 DID、安慰剂、双重机器学习</td></tr>
+  <tr><td>林娴、洪祥骏 2025，统计研究</td><td>贷款公告关键词匹配</td><td>未讨论</td><td>因变量大量为 0→Tobit＋仅获贷企业子样本；PSM；同行业同年度均值 IV</td></tr>
+  <tr><td colspan="4" style="color:var(--gold)">E. 没讨论披露选择性（11 篇）</td></tr>
+  <tr><td>李广子、刘力 2020，金融研究</td><td>手工逐笔合约 1,069 家、13,096 笔</td><td>否</td><td>跨年重复披露去重、剔金融业；稳健性用“全部贷款数据”加总成企业层指标</td></tr>
+  <tr><td>张烁珣、赵静艺 2025，统计研究</td><td>CSMAR 上市公司贷款明细</td><td>否（“选择性”指银企关系内生）</td><td>市场势力 IV＋协变量匹配＋渐进/模糊 DID</td></tr>
+  <tr><td>钟茜 2025，金融研究</td><td>CSMAR 逐笔贷款</td><td>否</td><td>只剔除关键变量缺失，未提披露/样本选择</td></tr>
+  <tr><td>潘敏等 2026，金融研究</td><td>CSMAR＋年报→2,012 个“银行—企业—年”</td><td>否</td><td>把“银行贷前筛选”当选择偏误，按漂绿分位 10/20/30% 剔除重估</td></tr>
+  <tr><td>桂荷发等 2025，金融研究</td><td>CSMAR 日度＋巨潮补充→84,499 个企业×银行×年</td><td>否</td><td>承认按贷款金额加权有选择性偏差，改用银行—年份政策虚拟变量；PSM 排除银行挑企业</td></tr>
+  <tr><td>宋科等 2026，金融研究</td><td>CSMAR 逐笔→企业—年</td><td>银企匹配选择</td><td>PSM（1:4）；固定权重/固定指数分解排除选择；Bartik IV＋控制函数；数据端剔除终止贷款、银团</td></tr>
+  <tr><td>彭伊、韩亮亮 2025，南开管理评论</td><td>逐笔贷款→企业—年</td><td>银行挑客户</td><td>固定贷款权重 vs 固定指数分解；PSM（1:1）；Tobit</td></tr>
+  <tr><td>李茂林等 2025，统计研究</td><td>贷款库日度→企业—年</td><td>否</td><td>核心解释变量滞后一期＋主贷款行固定效应；事件研究、换变量、Tobit/DGMM</td></tr>
+  <tr><td>刘贯春等 2025，中国工业经济</td><td>CSMAR 贷款库→企业—年</td><td>否（处理分组非随机）</td><td>事前选择变量×时间 FE；PSM 子样本；500 次虚假处理组；重构处理变量</td></tr>
+  <tr><td>刘志远等 2026，会计研究</td><td>附注借款性质手工整理＋巨潮公告补充</td><td>未称“选择偏差”，但承认覆盖边界</td><td>双源识别；脚注声明“数据更容易获得”“只能捕捉最主要的供给方”；剔除曾提供委托贷款企业</td></tr>
+  <tr><td>陆文力、卢盛荣 2025，金融研究</td><td>CSMAR 公告日度→企业—年</td><td>否</td><td>PSM；缩减样本；改变分组阈值</td></tr>
+  </tbody></table></div>
+  <div class="warn"><b>一句话：</b>只有 2 篇正面谈“贷款披露选择性”（李逸飞 2022、李广子等 2025），且都没有度量它；其余 19 篇要么处理的是银企匹配/政策分组，要么根本没讨论。</div></div>
+
+  <div class="block" id="s2"><div class="btitle"><span class="no">02</span><h3>现有做法的问题</h3><span class="sub">为什么统计校正替代不了“量出来”</span></div>
+  <div class="facts"><ol style="margin-left:18px;line-height:2">
+  <li><b>PSM 和 IV 处理的多是银企匹配</b>：企业挑银行、银行挑企业，和“年报里只列大额贷款”是两件事；</li>
+  <li><b>Heckman 依赖排他约束</b>：文献的选择变量是“是否为银行贷款客户”“是否发 CSR 报告”，不是“是否披露这笔贷款”；真正的排他约束在我们的场景里还没被论证过；</li>
+  <li><b>正交性论证不可检验</b>：说“选择在企业层、解释变量在银行层所以无关”，是假设，不是证据；</li>
+  <li><b>没有一篇度量披露比例</b>：他们有逐笔就没有分母，有报表就没有逐笔，没人把两边对上。</li>
+  </ol></div></div>
+
+  <div class="block" id="s3"><div class="btitle"><span class="no">03</span><h3>我们除了照搬，还能做什么</h3><span class="sub">把“披露选择性”变成可测量的变量</span></div>
+  <div class="facts"><p><b>核心：披露比例 = 该企业该年逐笔金额合计 ÷ 同口径附注借款合计。</b>等于 1 说明逐笔表基本列全；等于 0.3 说明只披露三成。试点已验证可行：2024 年 200 家里 99 家有余额口径记录，其中 44 家比值在 0.9—1.1，按金额加总只覆盖报表借款的 34%。</p></div>
+  <div class="scrollx"><table class="vt" style="min-width:820px"><thead><tr><th style="width:20%">用途</th><th>怎么做</th></tr></thead><tbody>
+  <tr><td>① 稳健性 / 样本筛选</td><td>只用“披露比例 ≥0.9 的完整企业年”重做主回归，排除“只披露了一部分合约”的干扰；另一版用全部样本＋控制披露比例。</td></tr>
+  <tr><td>② 当第二类结果变量</td><td>平台接入是否改变披露行为：披露比例、是否逐笔披露、披露笔数。文献都把披露选择性当内生性问题处理，没人把它当结果。</td></tr>
+  <tr><td>③ 选择性诊断</td><td>直接看披露比例与“银行是否已接入”“是否主贷款行”是否相关——比正交性论证更硬，能检验自选择是否真的与处理变量相关。</td></tr>
+  <tr><td>④ 用制度冲击做 DD</td><td>2022 年报「间接融资专章」强制逐笔、2023 年起取消；新三板分层对对外担保/借款有 10% 豁免（基础层）——规则变化外生影响“是否披露”，可对披露比例做 DD。</td></tr>
+  <tr><td>⑤ 排他约束的候选</td><td>把“分层导致的披露豁免差异”“是否属于强制披露情形”作为 Heckman 第一阶段的排他变量；但要论证它们不直接影响利率/担保方式。</td></tr>
+  </tbody></table></div>
+  <div class="warn"><b>口径：</b>分子只能用「期末借款余额」或「实际借款金额」，「借款合同金额」不能直接和余额比；分母用附注的短期借款＋长期借款＋一年内到期长期借款合计（不要用资产负债表行项目，那里混着应付债券、租赁负债）；只保留本公司及子公司，剔除银团、终止贷款，跨年重复披露只留一次；未披露的小额合约会天然压低比例，所以按 0 / 0—0.5 / 0.5—0.9 / ≥0.9 分档用，别当精确连续变量。</div></div>
+
+  <div class="block" id="s4"><div class="btitle"><span class="no">04</span><h3>检索记录：有人这么干过吗</h3><span class="sub">CNKI 高级检索（2026-11-02，天津大学 IP）、Google Scholar、网页检索</span></div>
+  <div class="scrollx"><table class="vt" style="min-width:860px"><thead><tr><th style="width:22%">检索式</th><th style="width:12%">命中</th><th>说明</th></tr></thead><tbody>
+  <tr><td>CNKI 主题＝逐笔贷款</td><td>3 条</td><td>侯胜、王朗 2024（技术经济）；程超、赵春玲 2026 网络首发（金融学季刊）；谢云峰等 2022（南方金融）</td></tr>
+  <tr><td>CNKI 主题＝逐笔合约</td><td>3 条</td><td>同上两篇＋一条区块链论文</td></tr>
+  <tr><td>CNKI 主题＝贷款合约</td><td>20 条/页</td><td>相关 2 条（刘程 2022 产业经济评论 数字金融与银行贷款合约；政策性银行贷款合约 2020）</td></tr>
+  <tr><td>CNKI 主题＝银企匹配</td><td>—</td><td>最新：程超、陈丹临 2026（现代经济探讨）；魏俊等 2025（南方经济）</td></tr>
+  <tr><td>CNKI 主题＝披露比例 / 贷款明细 / 贷款披露</td><td>噪声大</td><td>未见“逐笔金额与报表余额勾稽算披露比例”的研究</td></tr>
+  <tr><td>Google Scholar</td><td>被拦</td><td>reCAPTCHA 人机验证（IP 85.234.83.79），未取得结果；需人工过验证</td></tr>
+  <tr><td>网页检索（英文）</td><td>—</td><td>未见直接对应：只有 Bank loan information and information asymmetry in the stock market: evidence from China（Financial Innovation 2022）等相关但不做该度量</td></tr>
+  </tbody></table></div>
+  <div class="facts"><p><b>补充发现（不在原来 43 篇里）：</b>侯胜、王朗（2024，技术经济）《商业银行数字化转型与企业贷款资金配置——基于企业逐笔贷款合约的经验证据》；程超、赵春玲（2026 网络首发，金融学季刊）《银企数字化协同赋能科创企业信贷融资研究——基于企业逐笔贷款合约的经验证据》；程超、陈丹临（2026，现代经济探讨）《规模匹配到数字匹配》；谢云峰等（2022，南方金融）用中小银行逐笔贷款；另有 2026 年硕士论文用某省某银行微观贷款数据。这几篇是否纳入文献卡片待定。</p>
+  <p><b>结论：</b>“用逐笔数据核对报表借款余额、量出每家企业的披露比例”在 CNKI 与网页检索里没有先例；论文里写“尚未见到”，不写首创。</p></div></div>
+  </section>`;
   app.querySelectorAll('.secnav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth',block:'start'})));
 }
 
@@ -901,7 +976,7 @@ function renderPapers(s){const tb=document.getElementById('toolbar'),grid=docume
   draw();}
 let CUR=(location.hash||'').replace(/^#\/?/,'');
 function go(h){CUR=h;try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}route();}
-function route(){const h=CUR;modal.classList.remove('on');lb.classList.remove('on');window.scrollTo({top:0});if(!h)renderHome();else if(h==='vars')renderVars();else renderDetail(h);makeResizable(app);}
+function route(){const h=CUR;modal.classList.remove('on');lb.classList.remove('on');window.scrollTo({top:0});if(!h)renderHome();else if(h==='vars')renderVars();else if(h==='sel')renderSel();else renderDetail(h);makeResizable(app);}
 window.addEventListener('hashchange',()=>{CUR=location.hash.replace(/^#\/?/,'');route();});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;e.preventDefault();go(a.getAttribute('href').replace(/^#\/?/,''));});
 route();
