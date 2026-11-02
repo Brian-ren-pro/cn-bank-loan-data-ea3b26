@@ -579,8 +579,7 @@ const S={
 
 /* ============ 首页对比表 ============ */
 const CMP=[
- {k:'a-annual',name:'A 股 · 定期报告',db:'CSMAR 借款统计表（半年度）',unit:'企业—半年',scope:'期末余额',yrs:'2000—2025',size:'117,323 行 · 5,446 家',f:['n','p:汇总','n','p:短/长','y:四类汇总','n','y']},
- {k:'a-annual',name:'A 股 · 定期报告（逐笔）',db:'无库，手工整理（李广子 2020、2025）',unit:'贷款合约',scope:'期末余额（只列金额较大的合约）',yrs:'2008—2021',size:'约 1.3 万笔',f:['y','y','p:约 87%','y','p:约 60%','n','y']},
+ {k:'a-annual',name:'A 股 · 定期报告',db:'汇总：CSMAR 借款统计表（半年度）；逐笔：无库，手工整理（李广子 2020、2025）',unit:'企业—半年（汇总）／贷款合约（逐笔）',scope:'期末余额；逐笔只列金额较大的合约',yrs:'汇总 2000—2025；逐笔 2008—2021',size:'117,323 行 · 5,446 家；逐笔约 1.3 万笔',f:['p:仅逐笔','y','p:逐笔约 87%','y','y:四类汇总','n','y']},
  {k:'a-ann',name:'A 股 · 公告',db:'CSMAR 借款表（日）；CNRDS 银行借款',unit:'贷款事件',scope:'多为拟申请的授信额度（金额上下限）',yrs:'本地 2018—2025',size:'188,238 行 · 5,101 家',f:['y','p:上下限','n:0.7%','p:26%','p:类型编码','p:粗类','y']},
  {k:'n-annual',name:'新三板 · 定期报告',db:'无库；我们自建三套',unit:'企业—年 / 逐笔 / 企业×银行',scope:'汇总：期末余额；逐笔：余额与合同金额混合，按“金额性质”区分',yrs:'2022—2025',size:'24,039 企业年 · 33,180 笔 · 51,550 对',f:['y','y','p:32%','p:64%','y:95%','n','y']},
  {k:'n-ann',name:'新三板 · 公告',db:'无；3 家公司示例',unit:'一份公告',scope:'授信额度、拟申请金额、担保额度',yrs:'2019—2025',size:'1,831 条 · 98 条涉贷',f:['p:正文多数写','p:申请额度','n:样本 0/7','y','p:6/7','y','y']},
@@ -813,7 +812,7 @@ function renderHome(){setNav('home');
    <div class="col"><div class="cat">银行<span>BANKS · REGULATOR</span></div>${node('bank-annual','定期报告','年报 · 财务数据库','贷款总额与结构、五级分类、不良、拨备、集中度；只到银行—年','CSMAR 银行财务库 · 600 多家银行数据',false)}${node('bank','内部数据','监管报送 / 单行系统','全部企业、逐笔、脱敏；没有企业财务；不可复现','拿不到',true)}</div>
   </div>
   <div class="legend">每个板块含：<b>原始数据来源</b> · <b>面板数据处理</b>（全部字段、处理步骤） · <b>数据概述</b> · <b>相关顶刊文献</b>　｜　跨板块的变量定义见 <a href="#vars" style="color:var(--gold)">变量构造手册</a></div>
-  <div class="homesec"><h3>七类数据各能拿到什么</h3><div class="sub">按字段比较。“新三板 · 定期报告”和“A 股 · 公告”的百分比是该字段在全表中有值的比例；其他格子按数据说明或文献判断。点击名称进入对应板块。</div>
+  <div class="homesec"><h3>银行贷款相关的六类数据</h3><div class="sub">每一行是一种来源，与上面的树一一对应；同一来源的汇总数和逐笔数据合在一行。按字段比较：“新三板 · 定期报告”和“A 股 · 公告”的百分比是该字段在全表中有值的比例；其他格子按数据说明或文献判断。点击名称进入对应板块。</div>
    <div class="scrollx"><table class="cmp"><thead><tr><th>数据</th><th>现成数据库</th><th>一行是</th><th>额度还是余额</th><th>年份</th><th>规模</th>${CMPH.map(h=>`<th style="text-align:center">${h}</th>`).join('')}</tr></thead><tbody>${CMP.map(r=>`<tr><td class="src"><a href="#${r.k}">${r.name}</a></td><td>${r.db}</td><td>${r.unit}</td><td>${r.scope}</td><td style="white-space:nowrap">${r.yrs}</td><td>${r.size}</td>${r.f.map(cell).join('')}</tr>`).join('')}</tbody></table></div>
    <div class="keyline"><span><span class="sy">●</span> 有</span><span><span class="sp">◐</span> 部分有或口径受限</span><span><span class="sn">○</span> 没有</span></div>
   </div>
@@ -827,7 +826,7 @@ function renderHome(){setNav('home');
 function renderVars(){setNav('vars');
   app.innerHTML=`<section class="view"><div class="hero2"><div class="crumb">总览 / <b>变量构造手册</b></div><h2>变量构造手册</h2><div class="lead">同一笔贷款可以从五个维度描述：担保方式、科目与期限、品种、出借主体、额度还是已发生。先分清维度，再看变量：每个变量都是在其中一个维度上取值。之后是各组变量的公式、字段、文献与注意事项，最后是通用清洗规则。</div></div>
   <div class="secnav"><button data-t="vd">五个维度</button>${VG.map((g,i)=>`<button data-t="vg${i}">${g.h.replace(' · ','·')}</button>`).join('')}<button data-t="vr">通用处理规则</button></div>
-  <div class="block" id="vd"><div class="btitle"><span class="no">DIMENSIONS</span><h3>先分清贷款的五个维度</h3><span class="sub">每个维度：有哪些类别、在哪类材料里看到、我们的数据怎么记</span></div>${DIMS.map((d,i)=>`<div class="vgroup"><h4>${i+1}. ${d.h}</h4><div class="gsub">${d.s}</div><div class="scrollx"><table class="vt" style="min-width:760px"><thead><tr><th style="width:20%">类别</th><th style="width:40%">在哪类材料里看到</th><th>我们的数据怎么记</th></tr></thead><tbody>${d.rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}<div class="warn"><b>同一个问题换个统计单位，答案会变：</b>“哪种担保最多”，按逐笔笔数是保证（33,180 笔中 74% 带保证，可多选）；按企业—年面板的金额是抵质押（2023—2025 年 41%—44%，保证 29%—30%，信用 19%—22%）。说结论时要同时说清维度和统计单位。</div></div>
+  <div class="block" id="vd"><div class="btitle"><span class="no">DIMENSIONS</span><h3>贷款的五个维度</h3><span class="sub">每个维度：有哪些类别、在哪类材料里看到、我们的数据怎么记</span></div>${DIMS.map((d,i)=>`<div class="vgroup"><h4>${i+1}. ${d.h}</h4><div class="gsub">${d.s}</div><div class="scrollx"><table class="vt" style="min-width:760px"><thead><tr><th style="width:20%">类别</th><th style="width:40%">在哪类材料里看到</th><th>我们的数据怎么记</th></tr></thead><tbody>${d.rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}<div class="warn"><b>同一个问题换个统计单位，答案会变：</b>“哪种担保最多”，按逐笔笔数是保证（33,180 笔中 74% 带保证，可多选）；按企业—年面板的金额是抵质押（2023—2025 年 41%—44%，保证 29%—30%，信用 19%—22%）。说结论时要同时说清维度和统计单位。</div></div>
   ${VG.map((g,i)=>`<div class="vgroup block" id="vg${i}"><h4>${g.h}</h4><div class="gsub">${g.s}</div><div class="scrollx"><table class="vt"><thead><tr><th>变量</th><th>定义 / 公式</th><th>用到的字段</th><th>文献（描述统计）</th><th>注意</th></tr></thead><tbody>${g.rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td class="w">${r[4]}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}
   <div class="block" id="vr"><div class="btitle"><span class="no">RULES</span><h3>通用处理规则</h3><span class="sub">文献里反复出现的清洗步骤</span></div><div class="rules">${RULES.map(r=>`<div>${r}</div>`).join('')}</div></div></section>`;
   app.querySelectorAll('.secnav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth',block:'start'})));
