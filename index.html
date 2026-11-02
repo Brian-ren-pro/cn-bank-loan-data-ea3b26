@@ -921,7 +921,7 @@ function renderSel(){setNav('sel');
   </ol></div></div>
 
   <div class="block" id="s3"><div class="btitle"><span class="no">03</span><h3>我们除了照搬，还能做什么</h3><span class="sub">把“披露选择性”变成可测量的变量</span></div>
-  <div class="facts"><p><b>核心：披露比例 = 该企业该年逐笔金额合计 ÷ 同口径附注借款合计。</b>等于 1 说明逐笔表基本列全；等于 0.3 说明只披露三成。试点已验证可行：2024 年 200 家里 99 家有余额口径记录，其中 44 家比值在 0.9—1.1，按金额加总只覆盖报表借款的 34%。</p></div>
+  <div class="facts"><p><b>核心：披露比例 = 该企业该年逐笔金额合计 ÷ 同口径附注借款合计。</b>等于 1 说明逐笔表基本列全；等于 0.3 说明只披露三成。<b>2024 年试点已算过</b>（200 家有借款企业，分子只用「本公司 + 期末借款余额」）：0 的 135 家、0—0.3 的 13 家、0.3—0.6 的 11 家、0.6—0.9 的 7 家、0.9—1.1 的 29 家、大于 1.1 的 5 家；金额覆盖率 12.6%（23.01 亿 ÷ 181.98 亿）。口径不同，与试点报告里 34% 不可直接比较——报告用的是较宽口径。</p></div>
   <div class="scrollx"><table class="vt" style="min-width:820px"><thead><tr><th style="width:20%">用途</th><th>怎么做</th></tr></thead><tbody>
   <tr><td>① 稳健性 / 样本筛选</td><td>只用“披露比例 ≥0.9 的完整企业年”重做主回归，排除“只披露了一部分合约”的干扰；另一版用全部样本＋控制披露比例。</td></tr>
   <tr><td>② 当第二类结果变量</td><td>平台接入是否改变披露行为：披露比例、是否逐笔披露、披露笔数。文献都把披露选择性当内生性问题处理，没人把它当结果。</td></tr>
@@ -941,7 +941,7 @@ function renderSel(){setNav('sel');
   <tr><td>Google Scholar</td><td>被拦</td><td>reCAPTCHA 人机验证（IP 85.234.83.79），未取得结果；需人工过验证</td></tr>
   <tr><td>网页检索（英文）</td><td>—</td><td>未见直接对应：只有 Bank loan information and information asymmetry in the stock market: evidence from China（Financial Innovation 2022）等相关但不做该度量</td></tr>
   </tbody></table></div>
-  <div class="facts"><p><b>补充发现（不在原来 43 篇里）：</b>侯胜、王朗（2024，技术经济）《商业银行数字化转型与企业贷款资金配置——基于企业逐笔贷款合约的经验证据》；程超、赵春玲（2026 网络首发，金融学季刊）《银企数字化协同赋能科创企业信贷融资研究——基于企业逐笔贷款合约的经验证据》；程超、陈丹临（2026，现代经济探讨）《规模匹配到数字匹配》；谢云峰等（2022，南方金融）用中小银行逐笔贷款；另有 2026 年硕士论文用某省某银行微观贷款数据。这几篇是否纳入文献卡片待定。</p>
+  <div class="facts"><p><b>顶刊口径复核：</b>只看 15 家中文顶刊（经济研究、管理世界、金融研究、中国工业经济、世界经济、会计研究、统计研究、南开管理评论、财经研究、金融评论、数量经济技术经济研究、中国农村经济、经济学季刊、财贸经济、经济管理）。用「逐笔贷款 / 逐笔合约 / 贷款合约 / 贷款明细 / 银企匹配」在 CNKI 检索后按期刊过滤，<b>没有发现这 43 篇之外、用逐笔贷款做实证的中文顶刊论文</b>；唯一一篇用逐笔合约的新文章是《金融学季刊》2026 网络首发（CSSCI，但不在 15 家名单内）。非顶刊另有 4 篇（技术经济、现代经济探讨、南方金融等），按约定不纳入。</p>
   <p><b>结论：</b>“用逐笔数据核对报表借款余额、量出每家企业的披露比例”在 CNKI 与网页检索里没有先例；论文里写“尚未见到”，不写首创。</p></div></div>
   </section>`;
   app.querySelectorAll('.secnav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth',block:'start'})));
