@@ -496,7 +496,8 @@ const S={
   {id:'panel',tab:'① 企业—年 分类汇总',name:'企业年度借款与担保分类（附注汇总口径）',d:'ours_panel',
    meta:[['原始文件','企业年度面板.csv（提取层）／变量面板.csv（变量层）'],['一行是','一家企业一个年度'],['口径','期末余额（存量），覆盖全部借款'],['覆盖','2022—2025 年报 24,039 份、7,377 家']],
    funnelKey:'panel',
-   warn:'<b>用途：</b>这是新三板版的“CSMAR 半年表”，覆盖企业的全部借款，所以担保结构的<b>水平</b>（如信用借款占比）用它来算；逐笔数据有选择性，只用于机制和企业×银行设计。'},
+   warn:'<b>用途：</b>这是新三板版的“CSMAR 半年表”，覆盖企业的全部借款，所以担保结构的<b>水平</b>（如信用借款占比）用它来算；逐笔数据有选择性，只用于机制和企业×银行设计。',
+   rule:`<h6>组合类与非借款行怎么处理</h6><table><thead><tr><th>附注里的行</th><th>原始层（企业年度面板.csv）</th><th>变量层（变量面板.csv）</th></tr></thead><tbody><tr><td>信用、保证、抵押、质押</td><td>各自一列</td><td>信用 → 借款_信用；保证 → 借款_保证；抵押、质押 → 借款_抵质押</td></tr><tr><td>组合（如“抵押及保证借款”“质押+保证”）</td><td>组合合计一列，另存“组合明细”原文与金额</td><td>含抵押或质押的组合 → 抵质押；其余组合（如“保证+信用”）→ 保证；明细缺失、拆不开的 → 其他</td></tr><tr><td>应计利息</td><td>单列</td><td>不计入担保分类合计</td></tr><tr><td>票据贴现、保理等“其他”</td><td>单列</td><td>计入“其他”，不进入三类占比</td></tr></tbody></table><p>因此 CreditShare＝借款_信用 / 担保分类合计，CollShare＝借款_抵质押 / 担保分类合计，GuarShare＝借款_保证 / 担保分类合计；“抵押+保证”这样的组合算作抵质押。组合写法有 20 多种（2025H1 421 份半年报中 125 家有组合金额，最常见的是抵押与保证组合），提取规则要能识别“、和及/+＋”等连接写法。如需不归并的口径，可只用不含组合的纯信用、纯保证、纯抵质押重算。</p>`},
   {id:'loans',tab:'② 逐笔贷款',name:'逐笔贷款记录',d:'ours_loan',
    meta:[['原始文件','逐笔贷款记录.csv'],['一行是','一笔银行借款'],['口径','合同金额、期末余额并存，需按“金额性质”区分'],['覆盖','全量 2023—2025：33,180 笔、3,113 家、约 1,080 家银行；下表字段统计用本地 2024 年试点 689 条']],
    shots:[{img:'figs/sheet-neeq-a.png'},{img:'figs/sheet-neeq-b.png'}],shotcap:'试点文件前 30 行，上为前 15 个字段、下为后 15 个字段。',
@@ -578,13 +579,13 @@ const S={
 
 /* ============ 首页对比表 ============ */
 const CMP=[
- {k:'a-annual',name:'A 股 · 定期报告',db:'CSMAR 借款统计表（半年度）',unit:'企业—半年',scope:'余额（存量）',yrs:'2000—2025',size:'117,323 行 · 5,446 家',f:['n','p:汇总','n','p:短/长','y:四类汇总','n','y']},
- {k:'a-annual',name:'A 股 · 定期报告（逐笔）',db:'无库，手工整理（李广子 2020、2025）',unit:'贷款合约',scope:'期末存量中金额较大的',yrs:'2008—2021',size:'约 1.3 万笔',f:['y','y','p:约 87%','y','p:约 60%','n','y']},
- {k:'a-ann',name:'A 股 · 公告',db:'CSMAR 借款表（日）；CNRDS 银行借款',unit:'贷款事件',scope:'事件、流量，多为授信额度',yrs:'本地 2018—2025',size:'188,238 行 · 5,101 家',f:['y','p:上下限','n:0.7%','p:26%','p:类型编码','p:粗类','y']},
- {k:'n-annual',name:'新三板 · 定期报告',db:'无库；我们自建三套',unit:'企业—年 / 逐笔 / 企业×银行',scope:'余额＋合同金额',yrs:'2022—2025',size:'24,039 企业年 · 33,180 笔 · 51,550 对',f:['y','y','p:32%','p:64%','y:95%','n','y']},
- {k:'n-ann',name:'新三板 · 公告',db:'无；3 家公司示例',unit:'一份公告',scope:'授信额度、担保额',yrs:'2019—2025',size:'1,831 条 · 98 条涉贷',f:['p:正文多数写','p:申请额度','n:样本 0/7','y','p:6/7','y','y']},
- {k:'bank-annual',name:'银行 · 定期报告',db:'CSMAR 银行财务库；600 多家银行数据',unit:'银行—年',scope:'银行汇总余额',yrs:'2007—2024',size:'约 490 家银行',f:['n:看不到企业','p:总额','p:平均','p:中长期占比','p:按担保方式汇总','p:行业投向','n']},
- {k:'bank',name:'银行 · 内部数据',db:'拿不到',unit:'逐笔 / 银企—月',scope:'余额与发放额',yrs:'视论文',size:'17.5 万—180 万',f:['y','y','y','y','y','p','n']}
+ {k:'a-annual',name:'A 股 · 定期报告',db:'CSMAR 借款统计表（半年度）',unit:'企业—半年',scope:'期末余额',yrs:'2000—2025',size:'117,323 行 · 5,446 家',f:['n','p:汇总','n','p:短/长','y:四类汇总','n','y']},
+ {k:'a-annual',name:'A 股 · 定期报告（逐笔）',db:'无库，手工整理（李广子 2020、2025）',unit:'贷款合约',scope:'期末余额（只列金额较大的合约）',yrs:'2008—2021',size:'约 1.3 万笔',f:['y','y','p:约 87%','y','p:约 60%','n','y']},
+ {k:'a-ann',name:'A 股 · 公告',db:'CSMAR 借款表（日）；CNRDS 银行借款',unit:'贷款事件',scope:'多为拟申请的授信额度（金额上下限）',yrs:'本地 2018—2025',size:'188,238 行 · 5,101 家',f:['y','p:上下限','n:0.7%','p:26%','p:类型编码','p:粗类','y']},
+ {k:'n-annual',name:'新三板 · 定期报告',db:'无库；我们自建三套',unit:'企业—年 / 逐笔 / 企业×银行',scope:'汇总：期末余额；逐笔：余额与合同金额混合，按“金额性质”区分',yrs:'2022—2025',size:'24,039 企业年 · 33,180 笔 · 51,550 对',f:['y','y','p:32%','p:64%','y:95%','n','y']},
+ {k:'n-ann',name:'新三板 · 公告',db:'无；3 家公司示例',unit:'一份公告',scope:'授信额度、拟申请金额、担保额度',yrs:'2019—2025',size:'1,831 条 · 98 条涉贷',f:['p:正文多数写','p:申请额度','n:样本 0/7','y','p:6/7','y','y']},
+ {k:'bank-annual',name:'银行 · 定期报告',db:'CSMAR 银行财务库；600 多家银行数据',unit:'银行—年',scope:'银行贷款余额（汇总）',yrs:'2007—2024',size:'约 490 家银行',f:['n:看不到企业','p:总额','p:平均','p:中长期占比','p:按担保方式汇总','p:行业投向','n']},
+ {k:'bank',name:'银行 · 内部数据',db:'拿不到',unit:'逐笔 / 银企—月',scope:'余额与单笔发放额',yrs:'视论文',size:'17.5 万—180 万',f:['y','y','y','y','y','p','n']}
 ];
 const CMPH=['借款银行','金额','利率','期限 / 起止日','担保方式','资金用途','能接企业财务'];
 
@@ -652,6 +653,41 @@ const VG=[
   ['资本充足率','资本净额 / 风险加权资产','信用风险指标','—','']]}
 ];
 
+const DIMS=[
+ {h:'担保方式',s:'附注“短期借款分类”“长期借款分类”的标准列法；担保结构类变量（CreditShare、CollShare、Creditloan、增信序数）都在这一维度上取值。',rows:[
+  ['信用','附注分类表；CSMAR 半年表 CreditLoan；公告“担保方式为信用”','面板：借款_信用；逐笔：担保方式含“信用”'],
+  ['保证','同上；公告里常写股东、实控人或担保公司提供连带责任保证','面板：借款_保证（含不含抵质押的组合，如“保证+信用”）'],
+  ['抵押','同上；房产、土地、设备','面板：并入“抵质押”'],
+  ['质押','同上；专利、股权、存单、应收账款','面板：并入“抵质押”'],
+  ['组合','附注里单独一行，写法 20 多种，最常见“抵押与保证”；2025H1 421 份半年报中 125 家有组合金额','原始层单列（短期借款_组合、组合明细）；变量层含抵押或质押的计入抵质押，其余计入保证']]},
+ {h:'科目与期限',s:'资产负债表科目；规模和成本类变量（Bankloan、Loan、COD）在这一维度上取值。',rows:[
+  ['短期借款','资产负债表与附注','面板：短期借款_期末；CSMAR：ShortTermLoans'],
+  ['一年内到期的非流动负债','资产负债表；其中只有一部分是长期借款的当期部分，还含应付债券、租赁负债','面板：一年内到期非流动负债_期末；CSMAR 字段名为“一年内到期的长期借款”，说明书写明实为一年内到期的非流动负债'],
+  ['长期借款','资产负债表已扣除一年内到期部分；附注里常先列合计再“减：一年内到期”','面板：长期借款_期末（取报表数，不取附注扣减前的合计）'],
+  ['应计利息','附注分类表里单独一行；2025H1 421 份中 110 家有','单列，不计入担保分类合计']]},
+ {h:'品种',s:'附注“其他”行和公告标题里才看得到；Gloan、影子银行 Treat 等变量在这一维度上取值。',rows:[
+  ['流动资金贷款','公告最常见；附注偶尔写明','公告样本中有；逐笔未单列字段'],
+  ['固定资产、项目贷款','公告、附注；期限长、常配抵押','逐笔可从用途和期限判断'],
+  ['票据贴现（未终止确认）','附注“短期借款”下单列','单列，不计入担保分类；2025H1 421 份中 34 家“其他”行有票据或保理'],
+  ['应收账款保理','同上','同上'],
+  ['银行承兑汇票','形成的是“应付票据”，不在借款科目里','不计入借款'],
+  ['融资租赁、售后回租','不满足销售条件的确认为金融负债，多挂“长期应付款”','不在借款口径内；公告分类单列“融资租赁”'],
+  ['委托贷款','公告、附注；资金方不一定是关联方','刘志远等 2026 由附注和公告识别'],
+  ['股东、关联方借款','公告“关联交易”；附注“其他应付款”','公告分类单列“向关联方或非银行单位借款”'],
+  ['专项贷款','公告（如维泰股份 2025 年清欠账款专项贷款）','只在公告正文出现']]},
+ {h:'出借主体',s:'决定能不能对到法人银行、再合并银行侧变量；企业×银行类变量（newRel、报价行占比、银行变量加权）在这一维度上取值。',rows:[
+  ['国有大行、股份制银行','附注、公告、逐笔','逐笔与企业×银行表的“银行类型”；全国性 62%（逐笔笔数）'],
+  ['城商行、农商行与农信社、村镇银行','同上','地方法人行约 680 家，分走 32%'],
+  ['政策性银行','同上（如国开行新疆分行）','企业×银行表 262 条'],
+  ['民营或互联网银行、外资银行','同上','单列；外资 298 条'],
+  ['非银行金融机构、关联方、其他','小贷、融资租赁、担保公司本身、股东','逐笔提取时排除，不计入银行借款'],
+  ['识别率','有借款的企业中能识别出至少一家贷款银行：2023—2025 年 63%—73%','2022 年 96%，偏高原因待查']]},
+ {h:'额度还是已发生',s:'同一笔融资在公告、附注、逐笔里金额口径不同，不能直接相加或比较。',rows:[
+  ['综合授信额度','公告（年度授信、单家银行授信）','维泰股份 2023 年度 17 家合计不超过 559,500 万元'],
+  ['拟申请、合同金额','公告；逐笔“借款合同金额”','中科国信向中信银行申请 1,000 万元；逐笔 38.9%（试点）'],
+  ['实际借款、期末余额','只有年报、半年报附注','附注分类汇总全是余额；逐笔“期末借款余额”41.1%、“实际借款金额”9.0%（试点）'],
+  ['担保额度','预计担保、提供担保公告','中国康富 2023 年预计担保不超过 25.46 亿元，不等于实际担保余额']]}
+];
 /* ============ 通用渲染 ============ */
 const app=document.getElementById('app');
 const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg');
@@ -701,6 +737,7 @@ function tablePanel(t,sid){
   let h=metaHTML(t.meta);
   if(t.shots){h+=`<div class="datawide">${t.shots.map(o=>`<div class="shot" data-full="${o.img}"><img src="${o.img}" alt=""></div>`).join('')}<div class="cap">${t.shotcap||''}</div></div>`;}
   if(t.warn) h+=`<div class="warn">${t.warn}</div>`;
+  if(t.rule) h+=`<div class="facts">${t.rule}</div>`;
   if(t.static){
     h+=`<div class="subh">字段说明<small>${t.staticFields.length} 个字段</small></div><div class="scrollx"><table class="ft" style="min-width:600px"><thead><tr><th style="width:30%">字段</th><th>说明</th></tr></thead><tbody>${t.staticFields.map(r=>`<tr><td><span class="cn">${r[0]}</span></td><td class="ds">${r[1]}</td></tr>`).join('')}</tbody></table></div>`;
     return h;
@@ -777,7 +814,7 @@ function renderHome(){setNav('home');
   </div>
   <div class="legend">每个板块含：<b>原始数据来源</b> · <b>面板数据处理</b>（全部字段、处理步骤） · <b>数据概述</b> · <b>相关顶刊文献</b>　｜　跨板块的变量定义见 <a href="#vars" style="color:var(--gold)">变量构造手册</a></div>
   <div class="homesec"><h3>七类数据各能拿到什么</h3><div class="sub">按字段比较。“新三板 · 定期报告”和“A 股 · 公告”的百分比是该字段在全表中有值的比例；其他格子按数据说明或文献判断。点击名称进入对应板块。</div>
-   <div class="scrollx"><table class="cmp"><thead><tr><th>数据</th><th>现成数据库</th><th>一行是</th><th>口径</th><th>年份</th><th>规模</th>${CMPH.map(h=>`<th style="text-align:center">${h}</th>`).join('')}</tr></thead><tbody>${CMP.map(r=>`<tr><td class="src"><a href="#${r.k}">${r.name}</a></td><td>${r.db}</td><td>${r.unit}</td><td>${r.scope}</td><td style="white-space:nowrap">${r.yrs}</td><td>${r.size}</td>${r.f.map(cell).join('')}</tr>`).join('')}</tbody></table></div>
+   <div class="scrollx"><table class="cmp"><thead><tr><th>数据</th><th>现成数据库</th><th>一行是</th><th>额度还是余额</th><th>年份</th><th>规模</th>${CMPH.map(h=>`<th style="text-align:center">${h}</th>`).join('')}</tr></thead><tbody>${CMP.map(r=>`<tr><td class="src"><a href="#${r.k}">${r.name}</a></td><td>${r.db}</td><td>${r.unit}</td><td>${r.scope}</td><td style="white-space:nowrap">${r.yrs}</td><td>${r.size}</td>${r.f.map(cell).join('')}</tr>`).join('')}</tbody></table></div>
    <div class="keyline"><span><span class="sy">●</span> 有</span><span><span class="sp">◐</span> 部分有或口径受限</span><span><span class="sn">○</span> 没有</span></div>
   </div>
   <div class="homesec"><h3>三个读数据时最容易出错的地方</h3><div class="rules" style="grid-template-columns:1fr 1fr 1fr">
@@ -788,8 +825,9 @@ function renderHome(){setNav('home');
 
 /* ============ 变量手册 ============ */
 function renderVars(){setNav('vars');
-  app.innerHTML=`<section class="view"><div class="hero2"><div class="crumb">总览 / <b>变量构造手册</b></div><h2>变量构造手册</h2><div class="lead">把各板块文献里的贷款变量放在一起：公式、用到的字段、来自哪类数据、哪篇文献用过、要注意什么。最后一节是通用的清洗规则。</div></div>
-  <div class="secnav">${VG.map((g,i)=>`<button data-t="vg${i}">${g.h.replace(' · ','·')}</button>`).join('')}<button data-t="vr">通用处理规则</button></div>
+  app.innerHTML=`<section class="view"><div class="hero2"><div class="crumb">总览 / <b>变量构造手册</b></div><h2>变量构造手册</h2><div class="lead">同一笔贷款可以从五个维度描述：担保方式、科目与期限、品种、出借主体、额度还是已发生。先分清维度，再看变量：每个变量都是在其中一个维度上取值。之后是各组变量的公式、字段、文献与注意事项，最后是通用清洗规则。</div></div>
+  <div class="secnav"><button data-t="vd">五个维度</button>${VG.map((g,i)=>`<button data-t="vg${i}">${g.h.replace(' · ','·')}</button>`).join('')}<button data-t="vr">通用处理规则</button></div>
+  <div class="block" id="vd"><div class="btitle"><span class="no">DIMENSIONS</span><h3>先分清贷款的五个维度</h3><span class="sub">每个维度：有哪些类别、在哪类材料里看到、我们的数据怎么记</span></div>${DIMS.map((d,i)=>`<div class="vgroup"><h4>${i+1}. ${d.h}</h4><div class="gsub">${d.s}</div><div class="scrollx"><table class="vt" style="min-width:760px"><thead><tr><th style="width:20%">类别</th><th style="width:40%">在哪类材料里看到</th><th>我们的数据怎么记</th></tr></thead><tbody>${d.rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}<div class="warn"><b>同一个问题换个统计单位，答案会变：</b>“哪种担保最多”，按逐笔笔数是保证（33,180 笔中 74% 带保证，可多选）；按企业—年面板的金额是抵质押（2023—2025 年 41%—44%，保证 29%—30%，信用 19%—22%）。说结论时要同时说清维度和统计单位。</div></div>
   ${VG.map((g,i)=>`<div class="vgroup block" id="vg${i}"><h4>${g.h}</h4><div class="gsub">${g.s}</div><div class="scrollx"><table class="vt"><thead><tr><th>变量</th><th>定义 / 公式</th><th>用到的字段</th><th>文献（描述统计）</th><th>注意</th></tr></thead><tbody>${g.rows.map(r=>`<tr><td>${r[0]}</td><td class="f">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td class="w">${r[4]}</td></tr>`).join('')}</tbody></table></div></div>`).join('')}
   <div class="block" id="vr"><div class="btitle"><span class="no">RULES</span><h3>通用处理规则</h3><span class="sub">文献里反复出现的清洗步骤</span></div><div class="rules">${RULES.map(r=>`<div>${r}</div>`).join('')}</div></div></section>`;
   app.querySelectorAll('.secnav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth',block:'start'})));
