@@ -986,27 +986,27 @@ function renderPolicy(){setNav('policy');
     ['地方债务化解与房地产融资','中央经济工作会议、全国金融系统工作会议、政府工作报告','“优化债务重组和置换办法”“不得违规新增隐性债务”；“房地产融资协调机制常态化”“白名单”','置换额度、白名单项目——影响城投与上下游中小企业']
   ];
   app.innerHTML=`<section class="view">
-  <div class="hero2"><div class="crumb">总览 / <b>政策热点</b></div><h2>选题与政策热点（一）：政策热点</h2>
-  <div class="lead">这一页只做第一部分：把最近的全国性金融与综合会议、以及 2026 年 9—10 月央行与监管的操作层动态里，和银行、中小企业贷款相关的提法梳出来（本地 vault 的每日精读已更新到 2026-11-02）。第二部分「从政策热点到选题」另外做。</div></div>
+  <div class="hero2"><div class="crumb">总览 / <b>政策热点</b></div><h2>政策热点与选题设计</h2>
+  <div class="lead">2025 年 10 月以来，金融监管与宏观政策围绕金融强国、五篇大文章、中小金融机构减量提质、清欠与化债等持续部署。以下按两条线索梳理与银行信贷、中小企业融资相关的政策提法：一是高层会议与政府工作报告，二是 2026 年 9—11 月人民银行、金融监管总局与外汇局的讲话和政策操作；在此基础上归纳热点主题，并给出五个可展开的选题设计。</div></div>
 
-  <div class="block" id="q1"><div class="btitle"><span class="no">01</span><h3>高层会议：年度与中长期口径</h3><span class="sub">时间、文件、金融相关原话</span></div>
+  <div class="block" id="q1"><div class="btitle"><span class="no">01</span><h3>高层会议与政府工作报告</h3><span class="sub">时间、文件、金融相关原话</span></div>
   <div class="scrollx"><table class="vt" style="min-width:900px"><thead><tr><th style="width:11%">时间</th><th style="width:15%">会议/文件</th><th style="width:16%">文本</th><th>金融相关重点（原文摘录）</th></tr></thead><tbody>
   ${meetings.map(m=>`<tr><td>${m[0]}</td><td><b>${m[1]}</b></td><td>${m[2]}</td><td>${m[3]}</td></tr>`).join('')}
   </tbody></table></div></div>
 
-  <div class="block" id="q2"><div class="btitle"><span class="no">02</span><h3>近期操作层：2026 年 9—10 月</h3><span class="sub">讲话、政策文件与市场数据（来自本地 vault 的每日精读整理，2026-10-12—10-31）</span></div>
+  <div class="block" id="q2"><div class="btitle"><span class="no">02</span><h3>近期操作层：2026 年 9—11 月</h3><span class="sub">讲话、政策文件与市场数据（2026-10-12—11-02）</span></div>
   <div class="scrollx"><table class="vt" style="min-width:900px"><thead><tr><th style="width:11%">日期</th><th style="width:26%">事件/文件</th><th>要点</th></tr></thead><tbody>
   ${recent.map(r=>`<tr><td>${r[0]}</td><td><b>${r[1]}</b></td><td>${r[2]}</td></tr>`).join('')}
   </tbody></table></div></div>
 
-  <div class="block" id="q3"><div class="btitle"><span class="no">03</span><h3>热点主题</h3><span class="sub">哪些会/文件都在提、原话是什么、能不能落到数据上</span></div>
+  <div class="block" id="q3"><div class="btitle"><span class="no">03</span><h3>热点主题</h3><span class="sub">提法、原文与可观测变异</span></div>
   <div class="scrollx"><table class="vt" style="min-width:960px"><thead><tr><th style="width:16%">主题</th><th style="width:20%">出现在哪些会/文件</th><th style="width:33%">关键提法</th><th>可观测的变异（为选题做准备）</th></tr></thead><tbody>
   ${themes.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td></tr>`).join('')}
   </tbody></table></div></div>
 
   <div class="block" id="q4"><div class="btitle"><span class="no">04</span><h3>从政策热点到选题设计</h3><span class="sub">五个机制维度 → 五个可做的选题</span></div>
   <div class="warn"><b>选题设计思路：</b>用 2026 年 10 月的最新政策文件作为文章引言的政策高点与现实紧迫性背书，但用 2018—2025 年已经发生、且落在我们样本期内的前序同源政策作为准自然实验冲击（DID）。</div>
-  <div class="facts"><p>结合本页整理的 <b>7 场高层会议</b>与 <b>16 条 2026 年 9—11 月操作层动态</b>，站在商业银行信贷供给与银企契约签订的视角，当前顶层关注的核心矛盾收敛于五个机制维度：</p></div>
+  <div class="facts"><p>结合上述 <b>7 场高层会议</b>与 <b>16 条 2026 年 9—11 月操作层动态</b>，站在商业银行信贷供给与银企契约签订的视角，当前顶层关注的核心矛盾收敛于五个机制维度：</p></div>
   <div class="scrollx"><table class="vt" style="min-width:1000px"><thead><tr><th style="width:12%">热点聚类</th><th style="width:20%">2026 年 9—11 月核心文件与事件</th><th style="width:30%">涉银底层逻辑与对公信贷契约冲击</th><th style="width:22%">对应的前序同源政策冲击<br><span style="font-weight:400">（2018—2025 样本期内）</span></th><th style="width:10%">选题设计</th></tr></thead><tbody>
   <tr><td><b>1. 账期治理与现金流重构</b></td><td>国办发〔2026〕24 号文（最长付款期 60 日、强制现金支付、严禁商票/电子凭证替代）；中央经济工作会议与政府工作报告“加紧清理拖欠企业账款”；维泰股份 2025-09“清欠账款专项贷款”公告实例</td><td><b>切断供应链融资套利，重塑担保结构：</b>过去链主企业强推商票和供应链电子债权凭证，迫使中小微企业拿应收账款/票据去银行做高息保理、贴现或质押借款，且因回款不确定，银行往往追加“实控人连带责任保证”。强制 60 日现金支付改善经营性现金流（网页变量 <code>经营现金流_资产比</code>），使企业摆脱被动型的“应收账款质押/票据贴现”，推动银行转向<b>纯信用贷款（<code>CreditShare</code> 上升）</b>并降低综合利息成本。</td><td>① 2020-09《保障中小企业款项支付条例》（首部立法）；<br>② 2024-10 中办国办《关于解决拖欠企业账款问题的意见》＋2024-11 地方政府化债置换落地；<br>③ 2025-06 修订版《条例》施行。</td><td><a href="javascript:void(0)" onclick="topicToggle('t1')" style="color:var(--gold);font-weight:600">选题设计 →</a></td></tr>
   <tr><td><b>2. 贷款定价基准分层与利率传导</b></td><td>潘功胜 10-19 金融街论坛演讲第⑤条（财务能力强的企业可协商采用 DR001 或 LPR 定价，小微企业继续参考 LPR）；10 月 1Y LPR 3.0% vs 9 月 DR001 1.38%；政府工作报告“降低融资中间费用”</td><td><b>信贷定价从“统一基准”转向“按议价能力分层”：</b>DR001（1.38%）与 1Y LPR（3.0%）之间存在超过 160BP 的利差。大行下沉争抢优质中型企业时实际利率已明显低于 LPR（出现 LPR 减点），而议价能力弱、银行转换成本高的小微企业仍面临利率下调粘性，或遭遇非价格条款替代（降利率但加担保）。</td><td>① 2019-08 央行 LPR 形成机制改革（打破隐性下限）；<br>② 2020-08 存量浮动利率贷款定价基准批量转换；<br>③ 2024-09 金融监管总局将无还本续贷政策从小型企业阶段性扩围至中型企业。</td><td><a href="javascript:void(0)" onclick="topicToggle('t2')" style="color:var(--gold);font-weight:600">选题设计 →</a></td></tr>
@@ -1045,9 +1045,9 @@ function renderPolicy(){setNav('policy');
   <p><b>竞争性机制：</b>① 审批权上收与软信息损耗：法人资格转为分支行后，本地软信息关系型授信受更严格的集中风控约束，可能导致信贷缩减、银行转换（<code>Switch</code>）或抵押要求提高；② 资本改善与协同赋能：合并后不良率下降、资本充足率提升（匹配网页“银行·定期报告”的 600 余家银行财务数据库），资金成本下降，可能降低存量优质客户利率 <code>COD</code> 并增加中长期信贷 <code>LBankloan</code>。</p>
   <p><b>稳健性：</b>采用异质性稳健的多时点 DID 估计量（Callaway &amp; Sant'Anna, 2021），控制城市×年份（或省份×年份）固定效应，仅在同一地区内部比较“事前依赖涉改中小银行的企业”与“事前依赖未涉改银行的企业”，排除区域经济波动对银行重组与企业融资的共同影响。</p></div>
 
-  <div class="facts" style="margin-top:14px"><p><b>说明：</b>上面五个选题的“前序同源政策冲击”都在 2018—2025 样本期内，2026 年 9—11 月的政策文件只用于引言与机制解释，不作为识别用的冲击（避免政策与样本期重叠导致的预期效应）。</p></div></div>
+  <div class="facts" style="margin-top:14px"><p>五个选题的“前序同源政策冲击”都在 2018—2025 样本期内；2026 年 9—11 月的政策文件只用于引言与机制解释，不作为识别用的冲击，避免政策与样本期重叠带来的预期效应。</p></div></div>
 
-  <div class="block" id="q5"><div class="btitle"><span class="no">05</span><h3>来源</h3><span class="sub">2026-11-02 检索；操作层部分来自本地 vault 每日精读（2026-10-12—10-31）</span></div>
+  <div class="block" id="q5"><div class="btitle"><span class="no">05</span><h3>来源</h3><span class="sub">官方通稿与部委原文</span></div>
   <div class="facts"><p>① 四中全会《十五五规划建议》：<a href="https://hhzb.huainannet.com/content/202510/29/content_197325.html" target="_blank">转载</a>；② 中央经济工作会议：<a href="https://m.hexun.com/news/2025-12-11/222753306.html" target="_blank">转载</a>；③ 全国金融系统工作会议：<a href="http://ipaper.ce.cn/pc/content/202512/13/content_325177.html" target="_blank">经济日报</a>；④ 金融监管总局 2026 年监管工作会议：<a href="http://www.jingjiribao.cn/static/detail.jsp?id=632491" target="_blank">经济日报</a>；⑤ 2026 年政府工作报告：<a href="http://www.ykd.com.cn/pc/con/202603/16/content_69709.html" target="_blank">转载</a>；⑥ 中央金融工作会议（2023）：<a href="http://www.sxdygbjy.gov.cn/xxkt/2026n10y/tjpm/art/2026/art_71344f9907ef44c4b7ef62c710fe85f0.html" target="_blank">转载</a>；⑦ 潘功胜 2026 金融街论坛演讲：<a href="https://www.safe.gov.cn/big5/big5/www.safe.gov.cn/safe/2026/1019/27999.html" target="_blank">外汇局刊载全文</a>；⑧ 潘功胜 IMFC 发言：<a href="https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/2026101715340431532/index.html" target="_blank">人民银行</a>；⑨ 三季度贷款投向：<a href="https://www.pbc.gov.cn/goutongjiaoliu/113456/113469/2026102815121914211/index.html" target="_blank">人民银行</a>；⑩ 新型政策性金融工具投放：<a href="https://www.gov.cn/yaowen/liebiao/202610/content_7084409.htm" target="_blank">中国政府网</a>。正式引用前请以新华社/部委原文核对。</p></div></div>
   </section>`;
 }
