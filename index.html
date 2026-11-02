@@ -260,7 +260,7 @@ th.rzh{position:relative}
 <div class="wrap">
   <div class="topbar">
     <div class="brand"><span class="mark"></span><h1>中国银行贷款数据</h1><small>DATA SOURCES</small></div>
-    <div class="topnav"><a class="back" id="navHome" href="#">总览</a><a class="back" id="navVars" href="#vars">变量构造手册</a><a class="back" id="navSel" href="#sel">披露选择性</a></div>
+    <div class="topnav"><a class="back" id="navHome" href="#">总览</a><a class="back" id="navVars" href="#vars">变量构造手册</a><a class="back" id="navProc" href="#process">数据处理方案</a><a class="back" id="navSel" href="#sel">披露选择性</a><a class="back" id="navPol" href="#policy">政策热点</a></div>
   </div>
   <main id="app"></main>
 </div>
@@ -842,7 +842,7 @@ function makeResizable(root){
   });
 }
 /* ============ 首页 ============ */
-function setNav(w){document.getElementById('navHome').classList.toggle('on',w==='home');document.getElementById('navVars').classList.toggle('on',w==='vars');document.getElementById('navSel').classList.toggle('on',w==='sel');}
+function setNav(w){document.getElementById('navHome').classList.toggle('on',w==='home');document.getElementById('navVars').classList.toggle('on',w==='vars');document.getElementById('navProc').classList.toggle('on',w==='process');document.getElementById('navPol').classList.toggle('on',w==='policy');document.getElementById('navSel').classList.toggle('on',w==='sel');}
 function cell(v){const [t,txt]=v.split(':');const s={y:'<span class="sy">●</span>',p:'<span class="sp">◐</span>',n:'<span class="sn">○</span>'}[t];return `<td class="c">${s}${txt?`<small>${txt}</small>`:''}</td>`;}
 function renderHome(){setNav('home');
   const node=(href,tag,h4,p,db,none)=>`<a class="node" href="#${href}"><span class="tag">${tag}</span><h4>${h4}</h4><p>${p}</p><span class="db ${none?'none':''}">${db}</span><span class="arrow">→</span></a>`;
@@ -874,6 +874,117 @@ function renderVars(){setNav('vars');
   app.querySelectorAll('.secnav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth',block:'start'})));
 }
 
+
+
+/* ============ 数据处理方案 ============ */
+function renderProcess(){setNav('process');
+  const steps=[
+    ['① 年报文本','2023—2025 年年报 17,645 份（6,043 / 5,908 / 5,694），PDF 转文本后进入处理'],
+    ['② 识别贷款银行','用 4,175 家法人银行的名称词典在全文匹配：要求银行名前/后 80 字内出现“借款、贷款、授信、担保、抵押”等词，排除“开户、存款、理财”等语境'],
+    ['③ 筛出年报','至少识别出一家贷款银行的年报才进入抽取：9,323 份、4,198 家企业'],
+    ['④ 切片','每处银行名取前 150 字、后 350 字，重叠合并；另附短期借款、长期借款附注各约 1,500 字'],
+    ['⑤ LLM 抽取','按固定字段表抽取逐条记录，附逐字引文；每条再回原文做机器核对（见下）']
+  ];
+  app.innerHTML=`<section class="view">
+  <div class="hero2"><div class="crumb">总览 / <b>数据处理方案</b></div><h2>数据处理方案：从年报 PDF 到逐笔贷款记录</h2>
+  <div class="lead">新三板没有现成的逐笔贷款库。这一页写清我们怎么从 17,645 份年报里把贷款合约一条条抽出来：先找贷款银行、再切相关段落、再用 LLM 按固定字段抽取，最后回原文机器核对。也给出模型比较与召回，说明这套数据能做到什么、做不到什么。</div></div>
+
+  <div class="block" id="p1"><div class="btitle"><span class="no">01</span><h3>五步流程</h3><span class="sub">每一步的输入、规则与剩余量</span></div>
+  <div class="scrollx"><table class="vt" style="min-width:820px"><thead><tr><th style="width:18%">步骤</th><th>做法与数字</th></tr></thead><tbody>
+  ${steps.map(s=>`<tr><td><b>${s[0]}</b></td><td>${s[1]}</td></tr>`).join('')}
+  </tbody></table></div>
+  <div class="tmeta" style="margin-top:14px"><div><b>每份输入中位数</b><span>3,213 字</span></div><div><b>片段数中位数</b><span>3 段</span></div><div><b>全部输入 token</b><span>3,938 万</span></div><div><b>抽取出记录</b><span>42,353 条（去重前）</span></div></div></div>
+
+  <div class="block" id="p2"><div class="btitle"><span class="no">02</span><h3>模型比较</h3><span class="sub">同一批 200 家试点企业；现在用 Gemini 3.8 flash</span></div>
+  <div class="scrollx"><table class="vt" style="min-width:860px"><thead><tr><th>模型</th><th>记录数</th><th>全部核对通过</th><th>引文逐字</th><th>对到法人银行</th><th>多银行配对正确</th><th>召回</th></tr></thead><tbody>
+  <tr><td>Claude Haiku</td><td>689</td><td>90%</td><td>78%</td><td>92%</td><td>94%</td><td>0.34</td></tr>
+  <tr><td>Gemini 3.5 flash lite</td><td>744</td><td>90%</td><td>97%</td><td>96%</td><td>95%</td><td>0.35</td></tr>
+  <tr><td><b>Gemini 3.8 flash（采用）</b></td><td><b>724</b></td><td><b>93%</b></td><td><b>99%</b></td><td><b>98%</b></td><td><b>96%</b></td><td><b>0.38</b></td></tr>
+  <tr><td>DeepSeek v4 flash</td><td>726</td><td>94%</td><td>99%</td><td>98%</td><td>96%</td><td>0.37</td></tr>
+  </tbody></table></div>
+  <div class="facts"><p><b>指标口径：</b>“全部核对通过”= 银行名与金额都在原文中、相距不超过 400 字、金额换算正确；“召回”= 提取到的期末余额合计 ÷ 报表借款（金额口径的覆盖率，不是“抽到了 38% 的贷款笔数”）。</p>
+  <p><b>小样本试过的模型：</b>gpt-6-luna、gpt-5.6-luna（各 60 家，核对通过约 90%）；DeepSeek v4.1 flash（约 100 家，98%）；DeepSeek v3.2（19 家，85%）；Claude Sonnet（5 家）。</p></div></div>
+
+  <div class="block" id="p3"><div class="btitle"><span class="no">03</span><h3>抽取字段与硬约束</h3><span class="sub">每条记录先按这 15 个字段写，再回原文核对</span></div>
+  <div class="scrollx"><table class="vt" style="min-width:760px"><thead><tr><th style="width:22%">字段</th><th>定义</th></tr></thead><tbody>
+  <tr><td>银行原文</td><td>照抄原文银行名（含分支行），再对到 4,175 家法人银行</td></tr>
+  <tr><td>借款主体</td><td>本公司或子公司名称（不是本公司的记录后面剔除）</td></tr>
+  <tr><td>金额、金额原文</td><td>换算成元；同时照抄原文写法</td></tr>
+  <tr><td>金额性质</td><td>合同金额 / 实际借款金额 / 期末余额 / 最高额担保额 / 不确定</td></tr>
+  <tr><td>签约日、起始日、到期日</td><td>YYYY-MM-DD，原文没有则空</td></tr>
+  <tr><td>期限月数</td><td>原文写了才填</td></tr>
+  <tr><td>利率原文</td><td>照抄（如“3.45%”“LPR+15 基点”）</td></tr>
+  <tr><td>担保方式</td><td>信用、保证、抵押、质押的组合</td></tr>
+  <tr><td>担保说明</td><td>担保人、抵押物等原文摘要</td></tr>
+  <tr><td>期末是否仍有余额</td><td>是 / 否 / 不确定</td></tr>
+  <tr><td>引文</td><td>逐字摘录，同时含银行名和金额（机器核对用）</td></tr>
+  </tbody></table></div>
+  <div class="facts"><h6>三条硬约束</h6><ol style="margin-left:18px;line-height:2"><li>没有银行名称的不输出；</li><li>并列的多家银行必须逐一对应金额，看不清就填“不确定”；</li><li>引文必须逐字照抄。</li></ol>
+  <h6>两条排除规则</h6><p>“拟申请”“拟签订”的不记；借款主体不是本公司或子公司的不记。</p></div></div>
+
+  <div class="block" id="p4"><div class="btitle"><span class="no">04</span><h3>清洗与去重：42,353 → 33,180</h3><span class="sub">每一步删掉什么、重复从哪来</span></div>
+  <div class="scrollx"><table class="vt" style="min-width:760px"><thead><tr><th>步骤</th><th>剩余记录</th><th>删掉什么</th></tr></thead><tbody>
+  <tr><td>原始披露</td><td>42,353</td><td>—</td></tr>
+  <tr><td>全部核对通过</td><td>39,950</td><td>核对不通过 2,403（银行名/金额不在原文、距离过远、换算错）</td></tr>
+  <tr><td>借款主体为本公司</td><td>37,616</td><td>子公司、关联方借款 2,334</td></tr>
+  <tr><td>金额性质可用</td><td>36,302</td><td>“最高额担保额”“不确定” 1,314</td></tr>
+  <tr><td>金额正常</td><td>36,230</td><td>金额缺失、为零或异常 72</td></tr>
+  <tr><td>去重后</td><td><b>33,180</b></td><td>合并同一笔贷款 3,050</td></tr>
+  </tbody></table></div>
+  <div class="facts"><p><b>重复从哪来：</b>存量贷款在后续年报重复披露 6,160 组；同一年内借款附注和关联担保表各写一遍 3,007 组；同银行同金额、无日期的疑似续贷 10,313 笔——<b>未合并，只打标记</b>。同一笔贷款的判定：同企业、同银行、同金额，且起始日或到期日相同，保留最早披露年。</p></div></div>
+
+  <div class="block" id="p5"><div class="btitle"><span class="no">05</span><h3>这套方法能做到什么、做不到什么</h3><span class="sub">用之前先知道边界</span></div>
+  <div class="facts"><ul style="margin-left:18px;line-height:2">
+  <li><b>召回 0.38 是金额覆盖率，不是笔数覆盖率</b>：逐笔余额合计只到报表借款的约四成；未披露的小额合约、非银行借款都不在里面，所以逐笔数据适合做结构、条款和关系，不适合直接当“借款总量”。</li>
+  <li><b>金额性质决定能不能和报表对上</b>：期末余额 41.1%、合同金额 38.9%、实际借款 9.0%；只有“期末余额/实际借款”能和报表比，合同金额不能直接比。</li>
+  <li><b>模型与版本要记录</b>：不同模型核对通过率 85%—98%、召回 0.34—0.38；我们用 Gemini 3.8 flash，抽完统一做机器核对，人工抽查 90 条正确率 91%。</li>
+  <li><b>可复现性</b>：字段表、硬约束、切片规则、模型名与版本、输入片段都留档；字段字典与有值比例见新三板「面板数据处理」的逐笔贷款表。</li>
+  </ul></div></div>
+  </section>`;
+}
+
+
+/* ============ 政策热点 ============ */
+function renderPolicy(){setNav('policy');
+  const meetings=[
+    ['2025-10-23','二十届四中全会','《中共中央关于制定国民经济和社会发展第十五个五年规划的建议》','“加快建设金融强国”；“大力发展科技金融、绿色金融、普惠金融、养老金融、数字金融”；“推动各类金融机构专注主业、完善治理、错位发展”'],
+    ['2025-12-10/11','中央经济工作会议','会议公报','“引导金融机构加力支持扩大内需、科技创新、中小微企业等重点领域”；“创新科技金融服务”；“深入推进中小金融机构减量提质”；“加紧清理拖欠企业账款”'],
+    ['2025-12-12','全国金融系统工作会议','何立峰讲话','“继续着力做好防范化解地方中小金融机构风险、房地产企业涉金融风险、地方政府融资平台金融债务风险工作，严控增量、妥处存量、严防‘爆雷’”；“加强对扩大内需、科技创新、中小微企业等重点领域的金融支持”；“编制好‘十五五’金融相关规划”'],
+    ['2026-01-15','金融监管总局 2026 年监管工作会议','会议通稿（五项重点）','“稳妥推进中小金融机构减量提质，合理优化机构布局”；“深入整治无序竞争”；“督促银行保险机构专注主业、错位发展”；“更好发挥支持小微企业融资协调工作机制作用”'],
+    ['2026-03-13','全国两会·政府工作报告','2026 年政府工作报告','“设立1000亿元财政金融协同促内需专项资金，组合运用贷款贴息、融资担保、风险补偿等方式”；“规范信贷市场经营行为，降低融资中间费用，促进社会综合融资成本低位运行”；“深入推进地方中小金融机构减量提质”；“下更大力气解决拖欠企业账款问题”'],
+    ['2023-10-30/31','中央金融工作会议（最近一次）','会议公报','“优化资金供给结构，把更多金融资源用于促进科技创新、先进制造、绿色发展和中小微企业”；“严格中小金融机构准入标准和监管要求，立足当地开展特色化经营”；“及时处置中小金融机构风险”']
+  ];
+  const themes=[
+    ['金融“五篇大文章”','四中全会、中央经济工作会议、监管总局会议、政府工作报告、中央金融工作会议','科技金融、绿色金融、普惠金融、养老金融、数字金融；科技金融“四项试点”、科技再贷款扩容','科技型企业名单、绿色信贷贴息城市、普惠小微口径——可作为外生冲击或分组'],
+    ['中小金融机构“减量提质”与风险处置','四中全会（错位发展）、中央经济工作会议、全国金融系统工作会议、监管总局、政府工作报告','“减量提质、合理优化机构布局”“严控增量、妥处存量、严防爆雷”“整治无序竞争”','村镇银行退出与“村改支”、农信统一法人、合并重组——有明确时间与地区'],
+    ['融资成本下降与信贷市场规范','中央经济工作会议、政府工作报告、中央金融工作会议','“降低融资中间费用”“社会综合融资成本低位运行”“融资成本持续下降”','LPR、贷款中间费用监管、报价行行为——可通过逐笔利率与费用观察'],
+    ['财政金融协同：贴息、担保、风险补偿','政府工作报告（1000 亿元专项资金）、中央金融工作会议','“组合运用贷款贴息、融资担保、风险补偿”“扩大个人消费贷款和服务业经营主体贷款贴息”','贴息政策按城市/行业落地——可做 DID；担保与风险补偿可对应企业担保结构'],
+    ['拖欠企业账款治理','中央经济工作会议、政府工作报告','“加紧清理拖欠企业账款”“下更大力气解决拖欠企业账款问题，健全长效机制”','清欠条例（2025-06 施行）、特殊新增专项债——回款冲击可按地区/行业识别'],
+    ['地方债务化解','全国金融系统工作会议、政府工作报告、中央金融工作会议','“地方政府融资平台金融债务风险”“优化债务重组和置换办法”“不得违规新增隐性债务”','置换额度、融资平台退出——影响城投与上下游中小企业信贷'],
+    ['房地产融资','中央经济工作会议、全国金融系统工作会议、政府工作报告','“城市房地产融资协调机制常态化运行”“白名单”“保交房”','白名单项目、协调机制——与抵押品价值、开发贷相关'],
+    ['金融监管与风险防控','所有会议','“五大监管”“全面加强金融监管”“防范化解重点领域风险”','监管处罚、分类监管——可作为银行侧冲击']
+  ];
+  app.innerHTML=`<section class="view">
+  <div class="hero2"><div class="crumb">总览 / <b>政策热点</b></div><h2>选题与政策热点（一）：政策热点</h2>
+  <div class="lead">这一页只做第一部分：把最近几次全国性金融与综合会议的报告/通稿里和银行、中小企业贷款相关的提法梳出来。第二部分「从政策热点到选题」另外做——先把热点看准，再谈能做哪个。</div></div>
+
+  <div class="block" id="q1"><div class="btitle"><span class="no">01</span><h3>最近的会</h3><span class="sub">时间、文件、金融相关原话</span></div>
+  <div class="scrollx"><table class="vt" style="min-width:900px"><thead><tr><th style="width:11%">时间</th><th style="width:15%">会议/文件</th><th style="width:16%">文本</th><th>金融相关重点（原文摘录）</th></tr></thead><tbody>
+  ${meetings.map(m=>`<tr><td>${m[0]}</td><td><b>${m[1]}</b></td><td>${m[2]}</td><td>${m[3]}</td></tr>`).join('')}
+  </tbody></table></div></div>
+
+  <div class="block" id="q2"><div class="btitle"><span class="no">02</span><h3>热点主题</h3><span class="sub">哪些会都在提、原话是什么、能不能落到数据上</span></div>
+  <div class="scrollx"><table class="vt" style="min-width:960px"><thead><tr><th style="width:17%">主题</th><th style="width:20%">出现在哪些会</th><th style="width:33%">关键提法</th><th>可观测的变异（为选题做准备）</th></tr></thead><tbody>
+  ${themes.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${x[3]}</td></tr>`).join('')}
+  </tbody></table></div></div>
+
+  <div class="block" id="q3"><div class="btitle"><span class="no">03</span><h3>第二部分（待做）：从政策热点到选题</h3><span class="sub">先不展开，等热点确认后再筛</span></div>
+  <div class="facts"><p>下一步才是选题：从上面 8 个热点里，筛出“有外生冲击、有明确时间与地区/企业变异、且我们的数据（新三板年报逐笔、企业×银行、披露比例）能接住”的 3—4 个，写成「政策热点 → 可做的问题 → 数据可行性 → 风险」。这一页先不动。</p></div></div>
+
+  <div class="block" id="q4"><div class="btitle"><span class="no">04</span><h3>来源</h3><span class="sub">2026-11-02 检索</span></div>
+  <div class="facts"><p>① 二十届四中全会《十五五规划建议》：<a href="https://hhzb.huainannet.com/content/202510/29/content_197325.html" target="_blank">淮南日报转载</a>；② 中央经济工作会议：<a href="https://m.hexun.com/news/2025-12-11/222753306.html" target="_blank">和讯转载</a>；③ 全国金融系统工作会议：<a href="http://ipaper.ce.cn/pc/content/202512/13/content_325177.html" target="_blank">经济日报</a>；④ 金融监管总局 2026 年监管工作会议：<a href="http://www.jingjiribao.cn/static/detail.jsp?id=632491" target="_blank">经济日报</a>；⑤ 2026 年政府工作报告：<a href="http://www.ykd.com.cn/pc/con/202603/16/content_69709.html" target="_blank">转载</a>；⑥ 中央金融工作会议（2023-10-30/31）：<a href="http://www.sxdygbjy.gov.cn/xxkt/2026n10y/tjpm/art/2026/art_71344f9907ef44c4b7ef62c710fe85f0.html" target="_blank">共产党员网转载</a>。建议正式引用时以新华社/中国政府网原文核对。</p></div></div>
+  </section>`;
+}
 
 /* ============ 披露选择性 ============ */
 function renderSel(){setNav('sel');
@@ -977,7 +1088,7 @@ function renderPapers(s){const tb=document.getElementById('toolbar'),grid=docume
   draw();}
 let CUR=(location.hash||'').replace(/^#\/?/,'');
 function go(h){CUR=h;try{history.replaceState(null,'',h?'#'+h:location.pathname+location.search);}catch(e){}route();}
-function route(){const h=CUR;modal.classList.remove('on');lb.classList.remove('on');window.scrollTo({top:0});if(!h)renderHome();else if(h==='vars')renderVars();else if(h==='sel')renderSel();else renderDetail(h);makeResizable(app);}
+function route(){const h=CUR;modal.classList.remove('on');lb.classList.remove('on');window.scrollTo({top:0});if(!h)renderHome();else if(h==='vars')renderVars();else if(h==='sel')renderSel();else if(h==='process')renderProcess();else if(h==='policy')renderPolicy();else renderDetail(h);makeResizable(app);}
 window.addEventListener('hashchange',()=>{CUR=location.hash.replace(/^#\/?/,'');route();});
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;e.preventDefault();go(a.getAttribute('href').replace(/^#\/?/,''));});
 route();
